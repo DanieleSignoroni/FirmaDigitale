@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE TDDML SYSTEM "../../../TDDML.dtd">
+<TDDML>
+  <!-- DEVICE_INVIO_DOCUMENTI (DEVICE_) -->
+  <AlterTable schema="SOFTRE" name="DEVICE_INVIO_DOCUMENTI">
+    <AddConstraint>
+      <Constraint name="Azienda_1956215154" refschema="THIP" reftable="AZIENDE_ESTESE" schema="SOFTRE" ondelete="Restrict">
+        <ColumnRef name="ID_AZIENDA"/>
+      </Constraint>
+      <Constraint name="Stampante_98722169" refschema="THERA" reftable="PRINTERS" schema="SOFTRE" ondelete="Restrict">
+        <ColumnRef name="ID_STAMPANTE"/>
+      </Constraint>
+    </AddConstraint>
+  </AlterTable>
+</TDDML>

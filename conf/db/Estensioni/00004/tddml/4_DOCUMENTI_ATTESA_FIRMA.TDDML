@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE TDDML SYSTEM "../../../TDDML.dtd">
+<TDDML>
+  <!-- DOCUMENTI_ATTESA_FIRMA (DOCUMEN): Documenti attesa firma; -->
+  <CreateTable schema="SOFTRE" name="DOCUMENTI_ATTESA_FIRMA" shortname="DOCUMEN">
+    <Column name="ID_AZIENDA" shortname="ID_AZIENDA" type="char" length="3" nullable="no"/>
+    <Column name="STATO" shortname="STATO" type="char" length="1" nullable="no"/>
+    <Column name="R_UTENTE_CRZ" shortname="R_UTENTE_C" type="char" length="20" nullable="yes"/>
+    <Column name="TIMESTAMP_CRZ" shortname="TIMESTAMP_" type="timestamp" nullable="no" default="CURRENT TIMESTAMP"/>
+    <Column name="R_UTENTE_AGG" shortname="R_UTENTE_A" type="char" length="20" nullable="yes"/>
+    <Column name="TIMESTAMP_AGG" shortname="TIMESTAMP0" type="timestamp" nullable="no" default="CURRENT TIMESTAMP"/>
+    <Column name="ID" shortname="ID" type="integer" nullable="no"/>
+    <Column name="R_DOC_DGT" shortname="R_DOC_DGT" type="bigint" nullable="yes"/>
+    <Column name="R_VRS_DOC_DGT" shortname="R_VRS_DOC_" type="smallint" nullable="yes"/>
+    <Column name="PROCESSATO" shortname="PROCESSATO" type="char" length="1" nullable="no" default="N"/>
+    <Column name="ERRORS" shortname="ERRORS" type="varchar" length="2000" nullable="yes"/>
+    <Column name="R_DEVICE" shortname="R_DEVICE" type="varchar" length="50" nullable="yes"/>
+  </CreateTable>
+  <CreateIndex schema="SOFTRE" name="DOCUMENTI_ATTE_I01" tabschema="SOFTRE" tabname="DOCUMENTI_ATTESA_FIRMA" shortname="DOCUME_I01" unique="yes">
+    <IndexCol name="ID_AZIENDA" order="Asc"/>
+    <IndexCol name="ID" order="Asc"/>
+  </CreateIndex>
+  <AlterTable schema="SOFTRE" name="DOCUMENTI_ATTESA_FIRMA">
+    <AddPrimaryKey>
+      <PrimaryKey>
+        <ColumnRef name="ID_AZIENDA"/>
+        <ColumnRef name="ID"/>
+      </PrimaryKey>
+    </AddPrimaryKey>
+  </AlterTable>
+  <Comment>
+    <CommentTable schema="SOFTRE" name="DOCUMENTI_ATTESA_FIRMA" text="Documenti attesa firma">
+      <CommentColumn name="ID_AZIENDA" text="Azienda"/>
+      <CommentColumn name="STATO" text="Stato"/>
+      <CommentColumn name="R_UTENTE_CRZ" text="Utente creazione"/>
+      <CommentColumn name="TIMESTAMP_CRZ" text="Timestamp creazione"/>
+      <CommentColumn name="R_UTENTE_AGG" text="Utente ultima modifica"/>
+      <CommentColumn name="TIMESTAMP_AGG" text="Timestamp ultima modifica"/>
+      <CommentColumn name="ID" text="Id"/>
+      <CommentColumn name="R_DOC_DGT" text="Documento dgt"/>
+      <CommentColumn name="R_VRS_DOC_DGT" text="Versione documento"/>
+      <CommentColumn name="PROCESSATO" text="Processato"/>
+      <CommentColumn name="ERRORS" text="Errors"/>
+      <CommentColumn name="R_DEVICE" text="Device"/>
+    </CommentTable>
+    <CommentIndex schema="SOFTRE" name="DOCUMENTI_ATTE_I01" text="Primary Key"/>
+  </Comment>
+  <Grant schema="SOFTRE" name="DOCUMENTI_ATTESA_FIRMA"/>
+</TDDML>

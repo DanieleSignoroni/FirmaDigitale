@@ -1,0 +1,7 @@
+<B>2024-06-03 14:40:01</B>
+<BR>Il file <B><I>W:\PthDev\Projects\Panthera\FirmaDigitale\conf\db\Estensioni\TDDML.dtd</I></B> e creato
+<BR>Il file <B>W:\PthDev\Projects\Panthera\FirmaDigitale\conf\db\Estensioni\00003\tddml\3_DROP_DEVICE_INVIO_DOCUMENTI.TDDML</B> e' stato generato correttamente.
+<BR>Il dizionario <B>DEVICE_INVIO_DOCUMENTI</B> è stato creato
+<BR>Il file <B>W:\PthDev\Projects\Panthera\FirmaDigitale\conf\db\Estensioni\00003\tddml\3_DEVICE_INVIO_DOCUMENTI.TDDML</B> e' stato generato correttamente.
+<BR>Il file <B>W:\PthDev\Projects\Panthera\FirmaDigitale\conf\db\Estensioni\00003\tddml\3_CONSTRAINT.TDDML</B> e' stato generato correttamente.
+<BR><B>La generazione tabella è completata con successo</B><BR>

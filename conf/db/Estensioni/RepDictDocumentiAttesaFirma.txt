@@ -1,0 +1,7 @@
+<B>2024-06-03 16:25:48</B>
+<BR>Il dizionario <B>DOCUMENTI_ATTESA_FIRMA</B> è stato cancellato
+<BR>Il file <B>W:\PthDev\Projects\Panthera\FirmaDigitale\conf\db\Estensioni\00004\tddml\4_DROP_DOCUMENTI_ATTESA_FIRMA.TDDML</B> e' stato generato correttamente.
+<BR>Il dizionario <B>DOCUMENTI_ATTESA_FIRMA</B> è stato creato
+<BR>Il file <B>W:\PthDev\Projects\Panthera\FirmaDigitale\conf\db\Estensioni\00004\tddml\4_DOCUMENTI_ATTESA_FIRMA.TDDML</B> e' stato generato correttamente.
+<BR>Il file <B>W:\PthDev\Projects\Panthera\FirmaDigitale\conf\db\Estensioni\00004\tddml\4_CONSTRAINT.TDDML</B> e' stato generato correttamente.
+<BR><B>La generazione tabella è completata con successo</B><BR>
