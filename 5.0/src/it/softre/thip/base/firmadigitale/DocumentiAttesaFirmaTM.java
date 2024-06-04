@@ -1,22 +1,6 @@
-/*
- * @(#)DocumentiAttesaFirmaTM.java
- */
-
-/**
- * DocumentiAttesaFirmaTM
- *
- * <br></br><b>Copyright (C) : Thera SpA</b>
- * @author Wizard 03/06/2024 at 16:25:52
- */
-/*
- * Revisions:
- * Date          Owner      Description
- * 03/06/2024    Wizard     Codice generato da Wizard
- *
- */
 package it.softre.thip.base.firmadigitale;
+
 import com.thera.thermfw.persist.*;
-import com.thera.thermfw.common.*;
 import java.sql.*;
 import com.thera.thermfw.base.*;
 import it.thera.thip.cs.*;

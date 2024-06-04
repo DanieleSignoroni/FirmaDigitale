@@ -14,7 +14,7 @@ public class DocumentiAttesaFirma extends DocumentiAttesaFirmaPO {
 	public int save() throws SQLException {
         if (!isOnDB()) {
             try {
-                setId(new Integer(Numerator.getNextInt("DocumentiAttesaFirma")));
+                setId(new Integer(Numerator.getNextInt("DocAttsFirma")));
             } catch (NumeratorException e) {
                 e.printStackTrace(Trace.excStream);
             }

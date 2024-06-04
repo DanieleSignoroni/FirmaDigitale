@@ -18,7 +18,6 @@ package it.softre.thip.base.firmadigitale;
 import com.thera.thermfw.persist.*;
 import java.sql.*;
 import java.util.*;
-import it.thera.thip.base.azienda.AziendaEstesa;
 import it.thera.thip.base.documentoDgt.DocumentoDigitale;
 import it.thera.thip.cs.*;
 import com.thera.thermfw.common.*;
@@ -76,7 +75,8 @@ public abstract class DocumentiAttesaFirmaPO extends EntitaAzienda implements Bu
    * 03/06/2024    CodeGen     Codice generato da CodeGenerator
    *
    */
-  public static Vector retrieveList(String where, String orderBy, boolean optimistic) throws SQLException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+  @SuppressWarnings("rawtypes")
+public static Vector retrieveList(String where, String orderBy, boolean optimistic) throws SQLException, ClassNotFoundException, InstantiationException, IllegalAccessException {
     if (cInstance == null)
       cInstance = (DocumentiAttesaFirma)Factory.createObject(DocumentiAttesaFirma.class);
     return PersistentObject.retrieveList(cInstance, where, orderBy, optimistic);
@@ -504,7 +504,8 @@ public abstract class DocumentiAttesaFirmaPO extends EntitaAzienda implements Bu
    * 03/06/2024    Wizard     Codice generato da Wizard
    *
    */
-  public Vector checkAll(BaseComponentsCollection components) {
+  @SuppressWarnings("rawtypes")
+public Vector checkAll(BaseComponentsCollection components) {
     Vector errors = new Vector();
     components.runAllChecks(errors);
     return errors;
