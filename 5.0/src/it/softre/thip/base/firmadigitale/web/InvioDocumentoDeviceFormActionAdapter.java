@@ -1,5 +1,6 @@
 package it.softre.thip.base.firmadigitale.web;
 
+import com.thera.thermfw.web.MDVToolBarButton;
 import com.thera.thermfw.web.WebToolBar;
 import com.thera.thermfw.web.WebToolBarButton;
 import com.thera.thermfw.web.servlet.FormActionAdapter;
@@ -23,7 +24,9 @@ public class InvioDocumentoDeviceFormActionAdapter extends FormActionAdapter {
 	public void modifyToolBar(WebToolBar toolBar) {
 		super.modifyToolBar(toolBar);
 		WebToolBarButton save = (WebToolBarButton) toolBar.getButtons().get(1);
+		MDVToolBarButton mdv = (MDVToolBarButton) toolBar.getButtons().get(12);
 		toolBar.getButtons().clear();
 		toolBar.addButton(save);
+		toolBar.addButton(mdv);
 	}
 }

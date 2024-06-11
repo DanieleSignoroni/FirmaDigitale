@@ -37,7 +37,8 @@ public class InvioDocumentoDeviceFormModifier extends WebFormModifier {
 		try {
 			String chiaveSelezionato = (String) getRequest().getAttribute("ChiaveSelezionato");
 			String className = (String) getRequest().getAttribute("ClassName");
-			InvioDocumentoDevice bo = (InvioDocumentoDevice)this.getBODataCollector().getBo();
+			getBODataCollector().setOnBORecursive(); //aggiungere per caricare i valori presenti sui componenti settati da parte dell'MDV
+			InvioDocumentoDevice bo = (InvioDocumentoDevice) getBODataCollector().getBo();
 			bo.setChiaveSelezionato(chiaveSelezionato);
 			bo.setClassName(className);
 			getBODataCollector().setBo(bo);
