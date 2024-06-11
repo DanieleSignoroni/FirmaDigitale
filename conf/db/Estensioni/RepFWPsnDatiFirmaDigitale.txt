@@ -1,0 +1,5 @@
+<B>2024-06-11 11:47:51</B>
+<B>2024-06-11 11:47:51</B>
+<BR>Il descrittore di classe <B>AssociazioneTipoDocFirma</B> è stato generato correttamente
+<BR>Il descrittore di classe <B>PsnDatiFirmaDigitale</B> è stato generato correttamente
+<BR><B>La generazione descrittori di classe è completata con successo</B><BR>

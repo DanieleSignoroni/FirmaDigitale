@@ -14,6 +14,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.Response.StatusType;
 
 import org.json.JSONObject;
@@ -42,6 +43,9 @@ public class DocumentiAttesaFirmaResource extends BaseResource {
 	@Path("/recupera")
 	public Response recuperaDocumentiInAttesaDiFrima(@QueryParam("IdDevice") String idDevice) {
 		JSONObject infoDocumento = service.recuperaDocumentoDaFirmare(idDevice);
+		if(infoDocumento.isEmpty()) {
+			return buildResponse(Status.OK,infoDocumento.put("info", "Nessun documento").toString());
+		}
 		String encodedFile = Base64.getEncoder().encodeToString((byte[]) infoDocumento.get("file"));
 
 		Map<String, Object> jsonResponse = new HashMap<String,Object>();

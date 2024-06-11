@@ -1,7 +1,6 @@
 package it.softre.thip.base.firmadigitale.api;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.ResultSet;
@@ -13,6 +12,7 @@ import javax.ws.rs.core.Response.Status;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import org.json.JSONObject;
 
@@ -24,7 +24,10 @@ import com.thera.thermfw.persist.Factory;
 import com.thera.thermfw.persist.KeyHelper;
 import com.thera.thermfw.persist.PersistentObject;
 
+import it.softre.thip.base.firmadigitale.AssociazioneTipoDocFirma;
+import it.softre.thip.base.firmadigitale.DocumentiAttesaFirma;
 import it.softre.thip.base.firmadigitale.DocumentiAttesaFirmaTM;
+import it.softre.thip.base.firmadigitale.PsnDatiFirmaDigitale;
 import it.thera.thip.base.documentoDgt.DocumentoDgtOggetto;
 import it.thera.thip.base.documentoDgt.DocumentoDigitale;
 import it.thera.thip.base.generale.PersDatiGen;
@@ -72,47 +75,64 @@ public class DocumentiAttesaFirmaService {
 				}
 				PDDocument document = PDDocument.load(inputstream);
 
-		        // Remove security from the document
-		        document.setAllSecurityToBeRemoved(true);
+				// Remove security from the document
+				document.setAllSecurityToBeRemoved(true);
 
-		        PDPage page = document.getPage(document.getNumberOfPages() - 1); // Get the last page
+				PDPage page = document.getPage(document.getNumberOfPages() - 1); // Get the last page
+				PDRectangle mediaBox = page.getMediaBox();
+				System.out.println("Page dimensions: width = " + mediaBox.getWidth() + ", height = " + mediaBox.getHeight());
 
-		        // Draw the signature image onto the page
-		        PDImageXObject pdImage = PDImageXObject.createFromByteArray(document, signatureBytes, "signature");
-		        float x = 200; // Example coordinates
-		        float y = 500; // Example coordinates
-		        PDPageContentStream contentStream = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.APPEND, true, true);
-		        contentStream.drawImage(pdImage, x, y, pdImage.getWidth(), pdImage.getHeight());
-		        contentStream.close();
+				
+				AssociazioneTipoDocFirma associazione = PsnDatiFirmaDigitale.recuperaAssociazioneTipoDocumento(docOri.getIdTipoDocDgt());
+				if(associazione == null) {
+					//errore grave
+				}
+				
+				// Draw the signature image onto the page
+				PDImageXObject pdImage = PDImageXObject.createFromByteArray(document, signatureBytes, "signature");
+				float x = associazione.getXPosition().floatValue(); // Example coordinates
+				float y = associazione.getYPosition().floatValue(); // Example coordinates
+				PDPageContentStream contentStream = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.APPEND, true, true);
+				contentStream.drawImage(pdImage, x, y, associazione.getWidth().floatValue(), associazione.getHeight().floatValue());
+				contentStream.close();
 
-		        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-		        document.save(byteArrayOutputStream);
-		        document.close();
+				ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+				document.save(byteArrayOutputStream);
+				document.close();
 
 				byte[] signedPdfBytes = byteArrayOutputStream.toByteArray();
 				DocumentoDgtOggetto oggNew = DocumentoDigitale.creaDocumentoDgtOggetto(docOri, docOri.getTipoDocDgt(), false);
 				String filename = oggetto.getFilename();
 				if (filename != null && !filename.equals("")) {
-					oggNew.setFilename(getNomeAllegato("firmato"));
+					oggNew.setFilename(getNomeAllegato(oggetto.getNomeFilePdf()));
 					oggNew.setSSDMimeType(oggetto.getSSDMimeType());
-					if (!oggNew.onDB) {
-						oggNew.getDescrizione().setDescrizione(oggetto.getDescrizione().getDescrizione());
-						oggNew.getDescrizione().setDescrizioneRidotta(oggetto.getDescrizione().getDescrizioneRidotta());
+					String descrizione = oggetto.getDescrizione().getDescrizione();
+					descrizione = descrizione + " Firmato";
+					if(descrizione.length() > 35) {
+						descrizione = descrizione.substring(descrizione.length()-35);
 					}
+					oggNew.getDescrizione().setDescrizione(descrizione);
+					oggNew.getDescrizione().setDescrizioneRidotta(oggetto.getDescrizione().getDescrizioneRidotta());
 					if (PersDatiGen.getCurrentPersDatiGen().getMemorizzazioneDocDgt() == PersDatiGen.MEM_DOC_DGT_SU_DATABASE) {
-						oggNew.getOggettoDigitale().setBytes(signedPdfBytes);
-						oggNew.doAttach();
+						oggNew.setBlobBytes(signedPdfBytes);
 					}
 					oggNew.setCompresso(docOri.getTipoDocDgt().isZipAttachment());
 					if (PersDatiGen.getCurrentPersDatiGen().getMemorizzazioneDocDgt() == PersDatiGen.MEM_DOC_DGT_SU_FILESYSTEM) {
 						oggNew.percorsoSalvataggioFile();
-						oggNew.getOggettoDigitale().setBytes(signedPdfBytes);
-						oggNew.doAttach();
+						oggNew.setBlobBytes(signedPdfBytes);
 					}
 				}
+				oggNew.setOnDB(false);
 				oggNew.setProgressivo(docOri.getOggetti().size()+1);
 				docOri.getOggetti().add(oggNew);
 				int rc = docOri.save();
+
+				//flaggare il documento come processato
+				DocumentiAttesaFirma docAttesaFirma = DocumentiAttesaFirma.recuperaDocumentoInAttesaDiFirma(keyDocOri);
+				if(docAttesaFirma != null) {
+					docAttesaFirma.setProcessato(true);
+					rc = docAttesaFirma.save();
+				}
 				if(rc > 0) {
 					status = Status.OK;
 					ConnectionManager.commit();
@@ -133,8 +153,11 @@ public class DocumentiAttesaFirmaService {
 
 	public String getNomeAllegato(String path) {
 		String str = path;
-		if (path.lastIndexOf(File.separator) != -1)
-			str = path.substring(path.lastIndexOf(File.separator)+1);
+		if (path.lastIndexOf(".") != -1) {
+			str = path.substring(0,path.lastIndexOf("."));
+			String extension = path.substring(path.lastIndexOf("."));
+			str = str+"_Firmato"+extension;
+		}
 		return str;
 	}
 

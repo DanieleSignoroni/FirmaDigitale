@@ -1,0 +1,26 @@
+<tfml>
+<generator type="internalRowForm"/>
+
+<form classHdr="AssociazioneTipoDocFirma"
+	name="AssociazioneTipoDocFirmaForm"
+			errorList="no"
+			inputFont="Arial,10"
+			menubar="no"
+			submitReset="none"
+			onLoadPresent = "no"
+			toolbar="no">
+
+	
+	<textinput classAD="IdAzienda" name="IdAzienda"/>
+	<combobox classAD="TipoDocVen" name="TipoDocVen"/>
+	<combobox classAD="TipoDocAcq" name="TipoDocAcq"/>
+	<textinput classAD="XPosition" name="XPosition"/>
+	<textinput classAD="YPosition" name="YPosition"/>
+	<textinput classAD="Width" name="Width"/>
+	<textinput classAD="Height" name="Height"/>
+	<multisearchform classRD="TipoDocumento" name="TipoDocumento"/>
+	
+	
+</form>
+
+</tfml>

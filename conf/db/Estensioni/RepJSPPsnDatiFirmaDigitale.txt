@@ -1,0 +1,3 @@
+<B>2024-06-11 10:48:59</B>
+<BR>Il file <B>PsnDatiFirmaDigitale.jsp</B> è stato generato correttamente nel cartela <B>W:\PthDev\Projects\Panthera\FirmaDigitale\conf\db\Estensioni\00005\websrc\it\softre\thip\base\firmadigitale</B><BR>Il file <B>PsnDatiFirmaDigitale.jsp</B> è stato copiato nel classpath
+<BR><B>Generazione JSP è completata con successo</B><BR>

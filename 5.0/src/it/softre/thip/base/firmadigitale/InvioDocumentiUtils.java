@@ -53,32 +53,34 @@ public class InvioDocumentiUtils {
 		}
 		return true;
 	}
-	
+
 	@SuppressWarnings("rawtypes")
 	public static Vector getDocumentiDigitaliCollegatiDV(DocumentoVendita dv, String className) throws Exception {
-		String idEntita = getEntitaFromClassHdr(className);
+		//String idEntita = getEntitaFromClassHdr(className);
 		if (dv != null) {
 			String idAzienda = dv.getIdAzienda();
-			String idFunzione = null;
-			if (dv.getTipoBolla() == TipoBolla.DDT) {
-				idFunzione = ApriDocumentoDigitale.DDT_VENDITE;
-			}
-			else if (dv.getTipoBolla() == TipoBolla.FATTURA_ACCOMPAGNATORIA) {
-				idFunzione = ApriDocumentoDigitale.FATT_ACCOM;
-			}
-			else if ((dv.getTipoBolla() == TipoBolla.ALTRO && dv.getCausale().getAzioneMagazzino() == AzioneMagazzino.ENTRATA)){
-				idFunzione = ApriDocumentoDigitale.BEM_VENDITE;
-			}
-			else if (dv.getTipoBolla() == TipoBolla.BEM){
-				idFunzione = ApriDocumentoDigitale.BEM_VE_SCA;
-			}
-			else return null;
+			//			String idFunzione = null;
+			//			if (dv.getTipoBolla() == TipoBolla.DDT) {
+			//				idFunzione = ApriDocumentoDigitale.DDT_VENDITE;
+			//			}
+			//			else if (dv.getTipoBolla() == TipoBolla.FATTURA_ACCOMPAGNATORIA) {
+			//				idFunzione = ApriDocumentoDigitale.FATT_ACCOM;
+			//			}
+			//			else if ((dv.getTipoBolla() == TipoBolla.ALTRO && dv.getCausale().getAzioneMagazzino() == AzioneMagazzino.ENTRATA)){
+			//				idFunzione = ApriDocumentoDigitale.BEM_VENDITE;
+			//			}
+			//			else if (dv.getTipoBolla() == TipoBolla.BEM){
+			//				idFunzione = ApriDocumentoDigitale.BEM_VE_SCA;
+			//			}
+			//			else return null;
 
-			String idTipoDoc = findTipoDocumentoDgt(idAzienda, idFunzione);
-			if (idTipoDoc == null) {
-				if (idEntita != null && !idEntita.equals(""))
-					idTipoDoc = findTipoDocumentoDgtFromAssocia(idAzienda, idEntita);
-			}
+			char tipoBolla = dv.getCausale().getTipoBolla();
+			String idTipoDoc = PsnDatiFirmaDigitale.getIdTipoDocumentoDigitale(tipoBolla, true);
+			//String idTipoDoc = findTipoDocumentoDgt(idAzienda, idFunzione);
+			//			if (idTipoDoc == null) {
+			//				if (idEntita != null && !idEntita.equals(""))
+			//					idTipoDoc = findTipoDocumentoDgtFromAssocia(idAzienda, idEntita);
+			//			}
 			if (idTipoDoc != null && !idTipoDoc.equals(""))
 				return findDocumentoDigitale(idAzienda, idTipoDoc, dv.getAnnoDocumento(), dv.getNumeroDocumento());
 			else
@@ -86,29 +88,34 @@ public class InvioDocumentiUtils {
 		}
 		return null;
 	}
-	
+
 	@SuppressWarnings("rawtypes")
 	public static Vector getDocumentiDigitaliCollegatiDA(DocumentoAcquisto dv, String className) throws Exception {
-		String idEntita = getEntitaFromClassHdr(className);
+		//String idEntita = getEntitaFromClassHdr(className);
 		if (dv != null) {
 			String idAzienda = dv.getIdAzienda();
-			String idFunzione = null;
-			if (dv.getTipoBolla() == TipoBolla.DDT) {
-				idFunzione = ApriDocumentoDigitale.DDT_ACQUISTI;
+			//			String idFunzione = null;
+			//			if (dv.getTipoBolla() == TipoBolla.DDT) {
+			//				idFunzione = ApriDocumentoDigitale.DDT_VENDITE;
+			//			}
+			//			else if (dv.getTipoBolla() == TipoBolla.FATTURA_ACCOMPAGNATORIA) {
+			//				idFunzione = ApriDocumentoDigitale.FATT_ACCOM;
+			//			}
+			//			else if ((dv.getTipoBolla() == TipoBolla.ALTRO && dv.getCausale().getAzioneMagazzino() == AzioneMagazzino.ENTRATA)){
+			//				idFunzione = ApriDocumentoDigitale.BEM_VENDITE;
+			//			}
+			//			else if (dv.getTipoBolla() == TipoBolla.BEM){
+			//				idFunzione = ApriDocumentoDigitale.BEM_VE_SCA;
+			//			}
+			//			else return null;
 
-			} else if (dv.getTipoBolla() == TipoBollaAcq.BEM) {
-				idFunzione = ApriDocumentoDigitale.BEM_ACQUISTI;
-			}
-			else if (dv.getTipoBolla() == TipoBollaAcq.ALTRO) {
-				idFunzione = ApriDocumentoDigitale.BEM_AC_SCA;
-			}
-			else return null;
-
-			String idTipoDoc = findTipoDocumentoDgt(idAzienda, idFunzione);
-			if (idTipoDoc == null) {
-				if (idEntita != null && !idEntita.equals(""))
-					idTipoDoc = findTipoDocumentoDgtFromAssocia(idAzienda, idEntita);
-			}
+			char tipoBolla = dv.getCausale().getTipoBolla();
+			String idTipoDoc = PsnDatiFirmaDigitale.getIdTipoDocumentoDigitale(tipoBolla, true);
+			//String idTipoDoc = findTipoDocumentoDgt(idAzienda, idFunzione);
+			//			if (idTipoDoc == null) {
+			//				if (idEntita != null && !idEntita.equals(""))
+			//					idTipoDoc = findTipoDocumentoDgtFromAssocia(idAzienda, idEntita);
+			//			}
 			if (idTipoDoc != null && !idTipoDoc.equals(""))
 				return findDocumentoDigitale(idAzienda, idTipoDoc, dv.getAnnoDocumento(), dv.getNumeroDocumento());
 			else
@@ -140,8 +147,8 @@ public class InvioDocumentiUtils {
 			}
 			if (idTipoDoc != null && !idTipoDoc.equals(""))
 				return findDocumentoDigitale(idAzienda, idTipoDoc, da.getAnnoDocumento(), da.getNumeroDocumento()).size() > 0 ? true : false;
-			else
-				return false;
+				else
+					return false;
 		}
 		return false;
 	}
@@ -173,8 +180,8 @@ public class InvioDocumentiUtils {
 			}
 			if (idTipoDoc != null && !idTipoDoc.equals(""))
 				return findDocumentoDigitale(idAzienda, idTipoDoc, dv.getAnnoDocumento(), dv.getNumeroDocumento()).size() > 0 ? true : false;
-			else
-				return false;
+				else
+					return false;
 		}
 		return false;
 	}

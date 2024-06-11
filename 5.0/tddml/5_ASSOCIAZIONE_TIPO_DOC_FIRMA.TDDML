@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE TDDML SYSTEM "../../../TDDML.dtd">
+<TDDML>
+  <!-- ASSOCIAZIONE_TIPO_DOC_FIRMA (ASSOCIA): Associazione tipo documento firma; -->
+  <CreateTable schema="SOFTRE" name="ASSOCIAZIONE_TIPO_DOC_FIRMA" shortname="ASSOCIA">
+    <Column name="ID_AZIENDA" shortname="ID_AZIEND0" type="char" length="3" nullable="no"/>
+    <Column name="STATO" shortname="STAT0" type="char" length="1" nullable="no"/>
+    <Column name="R_UTENTE_CRZ" shortname="R_UTENTE_0" type="char" length="20" nullable="yes"/>
+    <Column name="TIMESTAMP_CRZ" shortname="TIMESTAMP0" type="timestamp" nullable="no" default="CURRENT TIMESTAMP"/>
+    <Column name="R_UTENTE_AGG" shortname="R_UTENTE_1" type="char" length="20" nullable="yes"/>
+    <Column name="TIMESTAMP_AGG" shortname="TIMESTAMP1" type="timestamp" nullable="no" default="CURRENT TIMESTAMP"/>
+    <Column name="R_TIPO_DOC" shortname="R_TIPO_DOC" type="char" length="10" nullable="no"/>
+    <Column name="X_POSITION" shortname="X_POSITION" type="decimal" length="9" scale="2" nullable="yes"/>
+    <Column name="Y_POSITION" shortname="Y_POSITION" type="decimal" length="9" scale="2" nullable="yes"/>
+    <Column name="WIDTH" shortname="WIDTH" type="decimal" length="9" scale="2" nullable="yes"/>
+    <Column name="HEIGHT" shortname="HEIGHT" type="decimal" length="9" scale="2" nullable="yes"/>
+    <Column name="TIPO_DOC_VEN" shortname="TIPO_DOC_V" type="char" length="1" nullable="no" default="1"/>
+    <Column name="TIPO_DOC_ACQ" shortname="TIPO_DOC_A" type="char" length="1" nullable="no" default="1"/>
+  </CreateTable>
+  <CreateIndex schema="SOFTRE" name="ASSOCIAZIONE_T_I01" tabschema="SOFTRE" tabname="ASSOCIAZIONE_TIPO_DOC_FIRMA" shortname="ASSOCI_I01" unique="yes">
+    <IndexCol name="ID_AZIENDA" order="Asc"/>
+    <IndexCol name="R_TIPO_DOC" order="Asc"/>
+  </CreateIndex>
+  <AlterTable schema="SOFTRE" name="ASSOCIAZIONE_TIPO_DOC_FIRMA">
+    <AddPrimaryKey>
+      <PrimaryKey>
+        <ColumnRef name="ID_AZIENDA"/>
+        <ColumnRef name="R_TIPO_DOC"/>
+      </PrimaryKey>
+    </AddPrimaryKey>
+  </AlterTable>
+  <Comment>
+    <CommentTable schema="SOFTRE" name="ASSOCIAZIONE_TIPO_DOC_FIRMA" text="Associazione tipo documento firma">
+      <CommentColumn name="ID_AZIENDA" text="Azienda"/>
+      <CommentColumn name="STATO" text="Stato"/>
+      <CommentColumn name="R_UTENTE_CRZ" text="Utente creazione"/>
+      <CommentColumn name="TIMESTAMP_CRZ" text="Timestamp creazione"/>
+      <CommentColumn name="R_UTENTE_AGG" text="Utente ultima modifica"/>
+      <CommentColumn name="TIMESTAMP_AGG" text="Timestamp ultima modifica"/>
+      <CommentColumn name="R_TIPO_DOC" text="Tipo documento"/>
+      <CommentColumn name="X_POSITION" text="Posizione asse X"/>
+      <CommentColumn name="Y_POSITION" text="Posizione asse Y"/>
+      <CommentColumn name="WIDTH" text="Larghezza immagine"/>
+      <CommentColumn name="HEIGHT" text="Altezza immagine"/>
+      <CommentColumn name="TIPO_DOC_VEN" text="Tipo documento (VEN)"/>
+      <CommentColumn name="TIPO_DOC_ACQ" text="Tipo documento (ACQ)"/>
+    </CommentTable>
+    <CommentIndex schema="SOFTRE" name="ASSOCIAZIONE_T_I01" text="Primary Key"/>
+  </Comment>
+  <Grant schema="SOFTRE" name="ASSOCIAZIONE_TIPO_DOC_FIRMA"/>
+</TDDML>

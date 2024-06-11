@@ -1,0 +1,36 @@
+<tfml>
+  <generator type="form"/>
+  <form classHdr="PsnDatiFirmaDigitale"
+    name="PsnDatiFirmaDigitaleForm"
+    locktype="nolock"
+    errorList="yes" menubar="yes" toolbar="yes" submitReset="none"
+    jsLibraryName="it/softre/thip/base/firmadigitale/PsnDatiFirmaDigitale.js"
+    onLoadPresent="yes"
+    header="com.thera.thermfw.common.Header.jsp"
+    footer="com.thera.thermfw.common.Footer.jsp">
+    <menubar  name="myMenuBar">
+      <import file="it/thera/thip/cs/defObjMenu.tfml"/>
+    </menubar>
+    <toolbar name="myToolBar" imgwidth="16" imgheight="16">
+      <import file="it/thera/thip/cs/defObjMenu.tfml"/>
+    </toolbar>
+    <textinput name="IdAzienda" classAD="IdAzienda"/>
+    <tabbed name="mytabbed" height="100%" width="100%">
+      <tab name="tab1" resourceFile="it.softre.thip.base.firmadigitale.resources.PsnDatiFirmaDigitale" resourceID="tab1">
+        <combobox name="Abilitata" classAD="Abilitata"/>
+        <ajaxgrid name="AssociazioneDocumenti" classCD="AssociazioneDocumenti" type="independent">
+          <column classAD="IdTipoDocumento"/>
+          <column classAD="IdAzienda" hidden="yes"/>
+          <column classAD="TipoBolla"/>
+          <column classAD="XPosition"/>
+          <column classAD="YPosition"/>
+          <column classAD="Width"/>
+          <column classAD="Height"/>
+          <column classAD="Azienda.Descrizione" hideAsDefault="yes"/>
+          <column classAD="TipoDocumento.Descrizione.Descrizione" hideAsDefault="yes"/>
+        </ajaxgrid>
+      </tab>
+    </tabbed>
+  </form>
+</tfml>
+

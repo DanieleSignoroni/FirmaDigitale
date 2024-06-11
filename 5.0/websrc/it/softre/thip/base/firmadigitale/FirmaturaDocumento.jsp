@@ -7,8 +7,12 @@ String webAppPath = IniFile.getValue("thermfw.ini", "Web", "WebApplicationPath")
 <head>
 <meta charset="UTF-8">
 <title>Firma Documento</title>
+<link rel="icon" type="image/x-icon" href="/<%=webAppPath%>/thermweb/image/nav/favicon.ico">
  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css"
     integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+<link
+	href="/<%=webAppPath%>/it/softre/thip/base/firmadigitale/css/modal.css"
+	rel="stylesheet">
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
 	integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
 	crossorigin="anonymous"></script>
@@ -44,100 +48,166 @@ String webAppPath = IniFile.getValue("thermfw.ini", "Web", "WebApplicationPath")
         }
         .pdf-viewer {
             width: 100%;
-            height: 100%;
+            height: 99vh;
             border: none;
         }
+         .button-container {
+        margin-top: 10px;
+        display: flex;
+        gap: 10px;
+    }
+    .btn-custom {
+        background-color: rgb(117, 144, 166);
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        font-size: 16px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+    .btn-custom:hover {
+        background-color: rgb(117, 144, 166);
+    }
+    #signature-pad {
+        border: 2px solid #000;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        height:300px;
+        width:500px;
+    }
+    
+    canvas {
+touch-action: none; /* Prevent touch events from being handled by the browser */
+}
     </style>
 </head>
 <body>
 	<div class="container-fluid">
 		<div class="row">
-			<div class="col-md-4 col-left">
+			<div class="col-lg-6 col-sm-12 col-left p-2">
 			<h3>Firma qui</h3>
-				<canvas id="signature-pad" width="500" height="300"
+				<canvas id="signature-pad"
 					style="border: 1px solid #000000;"></canvas>
-				<button onclick="clearSignature()">Pulisci</button>
-				<button onclick="saveSignature()">Salva</button>
+				<div class="button-container">
+				<button class="btn-custom" onclick="clearSignature()">Pulisci</button>
+				<button class="btn-custom" onclick="saveSignature()">Salva</button>
+				</div>
 
 			</div>
-			<div class="col-md-8 col-right">
+			<div class="col-lg-6 col-sm-12 col-right">
 				<iframe class="pdf-viewer" id="pdfViewer" src="" frameborder="0"></iframe>
 				<input type="hidden" id="chiaveDocumentoDigitale"></input>
 			</div>
 		</div>
 	</div>
-
-	<script>
+	<div style="display: none" class="text-center">
+				<a href="#modalWarning" id="modalWarningClick"
+					class="trigger-btn" data-toggle="modal"></a>
+	</div>
+	<div id="modalWarning" class="modal fade">
+			<div class="modal-dialog modal-confirm">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h4 class="modal-title" id="modalTitle"></h4>
+					</div>
+					<div class="modal-body">
+						<p id="txtWarning" class="text-center"></p>
+					</div>
+					<div class="modal-footer" style="flex-wrap: unset;">
+						<button class="btn btn-block"
+							onClick="$('#modalWarning').modal('toggle');"
+							data-dismiss="modal">OK</button>
+					</div>
+				</div>
+			</div>
+	</div>
+	 <script>
         $(document).ready(function() {
             fetchDocument();
         });
+        
+        function openModal(paragraphId,elementToClick,text,titleId,titleText){
+        	$('#'+paragraphId).html(text);	
+        	$('#'+titleId).html(titleText);
+        	elementToClick.click();	
+        }
 
         function fetchDocument() {
             $.ajax({
-            	url: getURLWS() + '/firmaDigitale/documenti/attesaFirma/recupera',
+                url: getURLWS() + '/firmaDigitale/documenti/attesaFirma/recupera',
                 method: 'GET',
                 dataType: 'json',
                 success: function(data) {
-                	 var base64PDF = data.file;
-                     var chiaveDocumentoDigitale = data.info;
-					 $('#chiaveDocumentoDigitale').val(chiaveDocumentoDigitale);
-                     var pdfDataUrl = 'data:application/pdf;base64,' + base64PDF;
-                     $('#pdfViewer').attr('src', pdfDataUrl);
+                    if (data.info != 'Nessun documento') {
+                        clearInterval(pollingInterval); // Stop polling
+                        var base64PDF = data.file;
+                        var chiaveDocumentoDigitale = data.info;
+                        $('#chiaveDocumentoDigitale').val(chiaveDocumentoDigitale);
+                        var pdfDataUrl = 'data:application/pdf;base64,' + base64PDF;
+                        $('#pdfViewer').attr('src', pdfDataUrl);
+                    } else {
+                        startPolling();
+                    }
                 },
                 error: function(err) {
-                    $('#pdfViewer').replaceWith('<p>Error loading document.</p>');
                     console.error('Error fetching document:', err);
                 }
             });
         }
-        
+
+        function startPolling() {
+            pollingInterval = setInterval(fetchDocument, 3000); // Poll every second
+        }
+
         function getURLWS() {
-        	var ris;
-        	var url = window.location.href;
-        	var cut = url.indexOf("<%=webAppPath%>");
-        	ris = url.substring(0, cut);
-        	ris += "<%=webAppPath%>";
-        	ris += "/api";
-        	return ris;
+            var ris;
+            var url = window.location.href;
+            var cut = url.indexOf("<%=webAppPath%>");
+            ris = url.substring(0, cut);
+            ris += "<%=webAppPath%>";
+            ris += "/api";
+            return ris;
         }
 
         var canvas = document.getElementById('signature-pad');
         var ctx = canvas.getContext('2d');
         var drawing = false;
+        var pollingInterval;
 
         // Function to get the mouse or touch position relative to the canvas
         function getPosition(event) {
-	        var rect = canvas.getBoundingClientRect();
-	        var x, y;
-	        if (event.touches) {
-		        x = event.touches[0].clientX - rect.left;
-		        y = event.touches[0].clientY - rect.top;
-	        } else {
-		        x = event.clientX - rect.left;
-		        y = event.clientY - rect.top;
-        	}
-        	return {x: x, y: y};
+            var rect = canvas.getBoundingClientRect();
+            var x, y;
+            if (event.touches) {
+                x = event.touches[0].clientX - rect.left;
+                y = event.touches[0].clientY - rect.top;
+            } else {
+                x = event.clientX - rect.left;
+                y = event.clientY - rect.top;
+            }
+            return {x: x, y: y};
         }
 
         // Start drawing
         function startDrawing(event) {
-        	drawing = true;
-        	var position = getPosition(event);
-        	ctx.moveTo(position.x, position.y);
+            drawing = true;
+            var position = getPosition(event);
+            ctx.moveTo(position.x, position.y);
         }
 
         // Draw on the canvas
         function draw(event) {
-        	if (drawing) {
-        		var position = getPosition(event);
-        		ctx.lineTo(position.x, position.y);
-        		ctx.stroke();
-        	}
+            if (drawing) {
+                var position = getPosition(event);
+                ctx.lineTo(position.x, position.y);
+                ctx.stroke();
+            }
         }
 
         // Stop drawing
         function stopDrawing() {
-        	drawing = false;
+            drawing = false;
         }
 
         // Event listeners for mouse events
@@ -148,12 +218,12 @@ String webAppPath = IniFile.getValue("thermfw.ini", "Web", "WebApplicationPath")
 
         // Event listeners for touch events
         canvas.addEventListener('touchstart', function(event) {
-        	event.preventDefault(); // Prevent scrolling when touching the canvas
-        	startDrawing(event);
+            event.preventDefault(); // Prevent scrolling when touching the canvas
+            startDrawing(event);
         });
         canvas.addEventListener('touchmove', function(event) {
-        	event.preventDefault(); // Prevent scrolling when touching the canvas
-        	draw(event);
+            event.preventDefault(); // Prevent scrolling when touching the canvas
+            draw(event);
         });
         
         canvas.addEventListener('touchend', stopDrawing);
@@ -161,13 +231,31 @@ String webAppPath = IniFile.getValue("thermfw.ini", "Web", "WebApplicationPath")
 
         // Clear the canvas
         function clearSignature() {
-     	   ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.beginPath();  // Reset the path
+        }
+        
+        // Check if the canvas is empty
+        function isCanvasEmpty() {
+            const blankCanvas = document.createElement('canvas');
+            blankCanvas.width = canvas.width;
+            blankCanvas.height = canvas.height;
+            return canvas.toDataURL() === blankCanvas.toDataURL();
         }
 
         // Save the signature
         function saveSignature() {
-        	var canvas = document.getElementById('signature-pad');
-            var chiaveDocumentoDigitale = $('#chiaveDocumentoDigitale').val();
+        	var chiaveDocumentoDigitale = $('#chiaveDocumentoDigitale').val();
+        	if(chiaveDocumentoDigitale == ""){
+        		openModal('txtWarning',$('#modalWarningClick')[0],'Nessun documento da firmare','modalTitle','Attenzione!');
+                return;
+        	}
+            if (isCanvasEmpty()) {
+            	openModal('txtWarning',$('#modalWarningClick')[0],'La firma e vuota!','modalTitle','Attenzione!');
+                return;
+            }
+            
+            var canvas = document.getElementById('signature-pad');
             var signatureDataUrl = canvas.toDataURL('image/png');
             
             var requestData = {
@@ -181,11 +269,11 @@ String webAppPath = IniFile.getValue("thermfw.ini", "Web", "WebApplicationPath")
                 contentType: 'application/json',
                 data: JSON.stringify(requestData),
                 success: function(response) {
-                    alert('Signature saved successfully');
+                	//openModal('txtWarning',$('#modalWarningClick')[0],'Documento firmato correttamente!','modalTitle','Congratulazioni!');
+                    location.reload();
                 },
                 error: function(err) {
-                    console.error('Error saving signature:', err);
-                    alert('Error saving signature');
+                    openModal('txtWarning',$('#modalWarningClick')[0],'Errori nel salvataggio!','modalTitle','Attenzione!');
                 }
             });
         }

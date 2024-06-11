@@ -1,0 +1,10 @@
+<B>2024-06-11 11:47:44</B>
+<BR>Il dizionario <B>ASSOCIAZIONE_TIPO_DOC_FIRMA</B> è stato cancellato
+<BR>Il dizionario <B>PSN_DATI_FIRMA_DIGITALE</B> è stato cancellato
+<BR>Il file <B>W:\PthDev\Projects\Panthera\FirmaDigitale\conf\db\Estensioni\00005\tddml\5_DROP_PSN_DATI_FIRMA_DIGITALE.TDDML</B> e' stato generato correttamente.
+<BR>Il dizionario <B>PSN_DATI_FIRMA_DIGITALE</B> è stato creato
+<BR>Il dizionario <B>ASSOCIAZIONE_TIPO_DOC_FIRMA</B> è stato creato
+<BR>Il file <B>W:\PthDev\Projects\Panthera\FirmaDigitale\conf\db\Estensioni\00005\tddml\5_ASSOCIAZIONE_TIPO_DOC_FIRMA.TDDML</B> e' stato generato correttamente.
+<BR>Il file <B>W:\PthDev\Projects\Panthera\FirmaDigitale\conf\db\Estensioni\00005\tddml\5_PSN_DATI_FIRMA_DIGITALE.TDDML</B> e' stato generato correttamente.
+<BR>Il file <B>W:\PthDev\Projects\Panthera\FirmaDigitale\conf\db\Estensioni\00005\tddml\5_CONSTRAINT.TDDML</B> e' stato generato correttamente.
+<BR><B>La generazione tabella è completata con successo</B><BR>
