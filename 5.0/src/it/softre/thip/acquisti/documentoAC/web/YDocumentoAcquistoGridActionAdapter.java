@@ -5,11 +5,18 @@ import java.io.IOException;
 import javax.servlet.ServletException;
 
 import com.thera.thermfw.ad.ClassADCollection;
+import com.thera.thermfw.base.Trace;
+import com.thera.thermfw.common.ErrorMessage;
+import com.thera.thermfw.persist.PersistentObject;
 import com.thera.thermfw.web.ServletEnvironment;
 import com.thera.thermfw.web.WebToolBar;
 import com.thera.thermfw.web.WebToolBarButton;
+import com.thera.thermfw.web.servlet.GridActionAdapter;
 
-import it.thera.thip.acquisti.documentoAC.web.DocumentoAcquistoGridActionAdapter;
+import it.softre.thip.base.firmadigitale.InvioDocumentiUtils;
+import it.softre.thip.base.firmadigitale.PsnDatiFirmaDigitale;
+import it.thera.thip.acquisti.documentoAC.DocumentoAcquisto;
+import it.thera.thip.acquisti.documentoAC.web.DocAcqGridActionAdapter;
 
 /**
  * <h1>Softre Solutions</h1>
@@ -22,7 +29,7 @@ import it.thera.thip.acquisti.documentoAC.web.DocumentoAcquistoGridActionAdapter
  * </p>
  */
 
-public class YDocumentoAcquistoGridActionAdapter extends DocumentoAcquistoGridActionAdapter {
+public class YDocumentoAcquistoGridActionAdapter extends DocAcqGridActionAdapter {
 
 	private static final long serialVersionUID = 1L;
 
@@ -43,7 +50,25 @@ public class YDocumentoAcquistoGridActionAdapter extends DocumentoAcquistoGridAc
 	protected void otherActions(ClassADCollection cadc, ServletEnvironment se) throws ServletException, IOException {
 		String azione = getAzione(se);
 		if(azione.equals(INVIA_DOCUMENTO_A_FIRMARE)) {
-
+			try {
+				DocumentoAcquisto docVen = (DocumentoAcquisto) DocumentoAcquisto.elementWithKey(DocumentoAcquisto.class, 
+						getStringParameter(se.getRequest(), OBJECT_KEY), PersistentObject.NO_LOCK);
+				String className = getStringParameter(se.getRequest(), GridActionAdapter.CLASS_NAME);
+				if(docVen != null 
+						&& InvioDocumentiUtils.isDocumentoAbilitatoInvio(docVen) && PsnDatiFirmaDigitale.getCurrentPersDati().getAbilitata() == '1'
+						/*&& InvioDocumentiUtils.documentoVenditaHasDocumentiDigitali(docVen, className)*/) {
+					String thKey = getStringParameter(se.getRequest(), OBJECT_KEY);
+					se.getRequest().setAttribute("ChiaveSelezionato", thKey);
+					se.getRequest().setAttribute("ClassName", className);
+					String jsp = "it/softre/thip/base/firmadigitale/InvioDocumentoDevice.jsp";
+					se.sendRequest(getServletContext(),jsp+"?MODE=NEW&InitialActionAdapter=com.thera.thermfw.web.servlet.GridActionAdapter", false);
+				}else {
+					se.addErrorMessage(new ErrorMessage("BAS0000000"));
+					se.sendRequest(getServletContext(), "com/thera/thermfw/common/InfoAreaHandler.jsp", false);
+				}
+			} catch (Exception e) {
+				e.printStackTrace(Trace.excStream);
+			}
 		}else {
 			super.otherActions(cadc, se);
 		}

@@ -1,24 +1,8 @@
-/*
- * @(#)AssociazioneTipoDocFirmaPO.java
- */
-
-/**
- * null
- *
- * <br></br><b>Copyright (C) : Thera SpA</b>
- * @author Wizard 11/06/2024 at 11:47:49
- */
-/*
- * Revisions:
- * Date          Owner      Description
- * 11/06/2024    Wizard     Codice generato da Wizard
- *
- */
 package it.softre.thip.base.firmadigitale;
+
 import com.thera.thermfw.persist.*;
 import java.sql.*;
 import java.util.*;
-import it.thera.thip.base.azienda.AziendaEstesa;
 import it.thera.thip.base.documentoDgt.TipoDocumentoDigitale;
 import java.math.*;
 import it.thera.thip.cs.*;
@@ -28,657 +12,659 @@ import com.thera.thermfw.security.*;
 
 public abstract class AssociazioneTipoDocFirmaPO extends EntitaAzienda implements BusinessObject, Authorizable, Deletable, Child, Conflictable {
 
-  
-  /**
-   *  instance
-   */
-  private static AssociazioneTipoDocFirma cInstance;
 
-  /**
-   * Attributo iXPosition
-   */
-  protected BigDecimal iXPosition;
+	/**
+	 *  instance
+	 */
+	private static AssociazioneTipoDocFirma cInstance;
 
-  /**
-   * Attributo iYPosition
-   */
-  protected BigDecimal iYPosition;
+	/**
+	 * Attributo iXPosition
+	 */
+	protected BigDecimal iXPosition;
 
-  /**
-   * Attributo iWidth
-   */
-  protected BigDecimal iWidth;
+	/**
+	 * Attributo iYPosition
+	 */
+	protected BigDecimal iYPosition;
 
-  /**
-   * Attributo iHeight
-   */
-  protected BigDecimal iHeight;
+	/**
+	 * Attributo iWidth
+	 */
+	protected BigDecimal iWidth;
 
-  /**
-   * Attributo iTipoDocVen
-   */
-  protected char iTipoDocVen = '1';
+	/**
+	 * Attributo iHeight
+	 */
+	protected BigDecimal iHeight;
 
-  /**
-   * Attributo iTipoDocAcq
-   */
-  protected char iTipoDocAcq = '1';
+	/**
+	 * Attributo iTipoDocVen
+	 */
+	protected char iTipoDocVen = '1';
 
-  /**
-   * Attributo iTipodocumento
-   */
-  protected Proxy iTipodocumento = new Proxy(it.thera.thip.base.documentoDgt.TipoDocumentoDigitale.class);
+	/**
+	 * Attributo iTipoDocAcq
+	 */
+	protected char iTipoDocAcq = '1';
 
-  /**
-   * Attributo iParent
-   */
-  protected Proxy iParent = new Proxy(it.softre.thip.base.firmadigitale.PsnDatiFirmaDigitale.class);
+	/**
+	 * Attributo iTipodocumento
+	 */
+	protected Proxy iTipodocumento = new Proxy(it.thera.thip.base.documentoDgt.TipoDocumentoDigitale.class);
 
-  
-  /**
-   *  retrieveList
-   * @param where
-   * @param orderBy
-   * @param optimistic
-   * @return Vector
-   * @throws SQLException
-   * @throws ClassNotFoundException
-   * @throws InstantiationException
-   * @throws IllegalAccessException
-   */
-  /*
-   * Revisions:
-   * Date          Owner      Description
-   * 11/06/2024    CodeGen     Codice generato da CodeGenerator
-   *
-   */
-  public static Vector retrieveList(String where, String orderBy, boolean optimistic) throws SQLException, ClassNotFoundException, InstantiationException, IllegalAccessException {
-    if (cInstance == null)
-      cInstance = (AssociazioneTipoDocFirma)Factory.createObject(AssociazioneTipoDocFirma.class);
-    return PersistentObject.retrieveList(cInstance, where, orderBy, optimistic);
-  }
+	/**
+	 * Attributo iParent
+	 */
+	protected Proxy iParent = new Proxy(it.softre.thip.base.firmadigitale.PsnDatiFirmaDigitale.class);
 
-  /**
-   *  elementWithKey
-   * @param key
-   * @param lockType
-   * @return AssociazioneTipoDocFirma
-   * @throws SQLException
-   */
-  /*
-   * Revisions:
-   * Date          Owner      Description
-   * 11/06/2024    CodeGen     Codice generato da CodeGenerator
-   *
-   */
-  public static AssociazioneTipoDocFirma elementWithKey(String key, int lockType) throws SQLException {
-    return (AssociazioneTipoDocFirma)PersistentObject.elementWithKey(AssociazioneTipoDocFirma.class, key, lockType);
-  }
 
-  /**
-   * AssociazioneTipoDocFirmaPO
-   */
-  /*
-   * Revisions:
-   * Date          Owner      Description
-   * 11/06/2024    Wizard     Codice generato da Wizard
-   *
-   */
-  public AssociazioneTipoDocFirmaPO() {
-    setTipoDocVen('1');
-    setTipoDocAcq('1');
-    setIdAzienda(Azienda.getAziendaCorrente());
-  }
+	/**
+	 *  retrieveList
+	 * @param where
+	 * @param orderBy
+	 * @param optimistic
+	 * @return Vector
+	 * @throws SQLException
+	 * @throws ClassNotFoundException
+	 * @throws InstantiationException
+	 * @throws IllegalAccessException
+	 */
+	/*
+	 * Revisions:
+	 * Date          Owner      Description
+	 * 11/06/2024    CodeGen     Codice generato da CodeGenerator
+	 *
+	 */
+	@SuppressWarnings("rawtypes")
+	public static Vector retrieveList(String where, String orderBy, boolean optimistic) throws SQLException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+		if (cInstance == null)
+			cInstance = (AssociazioneTipoDocFirma)Factory.createObject(AssociazioneTipoDocFirma.class);
+		return PersistentObject.retrieveList(cInstance, where, orderBy, optimistic);
+	}
 
-  /**
-   * Valorizza l'attributo. 
-   * @param xPosition
-   */
-  /*
-   * Revisions:
-   * Date          Owner      Description
-   * 11/06/2024    Wizard     Codice generato da Wizard
-   *
-   */
-  public void setXPosition(BigDecimal xPosition) {
-    this.iXPosition = xPosition;
-    setDirty();
-  }
+	/**
+	 *  elementWithKey
+	 * @param key
+	 * @param lockType
+	 * @return AssociazioneTipoDocFirma
+	 * @throws SQLException
+	 */
+	/*
+	 * Revisions:
+	 * Date          Owner      Description
+	 * 11/06/2024    CodeGen     Codice generato da CodeGenerator
+	 *
+	 */
+	public static AssociazioneTipoDocFirma elementWithKey(String key, int lockType) throws SQLException {
+		return (AssociazioneTipoDocFirma)PersistentObject.elementWithKey(AssociazioneTipoDocFirma.class, key, lockType);
+	}
 
-  /**
-   * Restituisce l'attributo. 
-   * @return BigDecimal
-   */
-  /*
-   * Revisions:
-   * Date          Owner      Description
-   * 11/06/2024    Wizard     Codice generato da Wizard
-   *
-   */
-  public BigDecimal getXPosition() {
-    return iXPosition;
-  }
+	/**
+	 * AssociazioneTipoDocFirmaPO
+	 */
+	/*
+	 * Revisions:
+	 * Date          Owner      Description
+	 * 11/06/2024    Wizard     Codice generato da Wizard
+	 *
+	 */
+	public AssociazioneTipoDocFirmaPO() {
+		setTipoDocVen('1');
+		setTipoDocAcq('1');
+		setIdAzienda(Azienda.getAziendaCorrente());
+	}
 
-  /**
-   * Valorizza l'attributo. 
-   * @param yPosition
-   */
-  /*
-   * Revisions:
-   * Date          Owner      Description
-   * 11/06/2024    Wizard     Codice generato da Wizard
-   *
-   */
-  public void setYPosition(BigDecimal yPosition) {
-    this.iYPosition = yPosition;
-    setDirty();
-  }
+	/**
+	 * Valorizza l'attributo. 
+	 * @param xPosition
+	 */
+	/*
+	 * Revisions:
+	 * Date          Owner      Description
+	 * 11/06/2024    Wizard     Codice generato da Wizard
+	 *
+	 */
+	public void setXPosition(BigDecimal xPosition) {
+		this.iXPosition = xPosition;
+		setDirty();
+	}
 
-  /**
-   * Restituisce l'attributo. 
-   * @return BigDecimal
-   */
-  /*
-   * Revisions:
-   * Date          Owner      Description
-   * 11/06/2024    Wizard     Codice generato da Wizard
-   *
-   */
-  public BigDecimal getYPosition() {
-    return iYPosition;
-  }
+	/**
+	 * Restituisce l'attributo. 
+	 * @return BigDecimal
+	 */
+	/*
+	 * Revisions:
+	 * Date          Owner      Description
+	 * 11/06/2024    Wizard     Codice generato da Wizard
+	 *
+	 */
+	public BigDecimal getXPosition() {
+		return iXPosition;
+	}
 
-  /**
-   * Valorizza l'attributo. 
-   * @param width
-   */
-  /*
-   * Revisions:
-   * Date          Owner      Description
-   * 11/06/2024    Wizard     Codice generato da Wizard
-   *
-   */
-  public void setWidth(BigDecimal width) {
-    this.iWidth = width;
-    setDirty();
-  }
+	/**
+	 * Valorizza l'attributo. 
+	 * @param yPosition
+	 */
+	/*
+	 * Revisions:
+	 * Date          Owner      Description
+	 * 11/06/2024    Wizard     Codice generato da Wizard
+	 *
+	 */
+	public void setYPosition(BigDecimal yPosition) {
+		this.iYPosition = yPosition;
+		setDirty();
+	}
 
-  /**
-   * Restituisce l'attributo. 
-   * @return BigDecimal
-   */
-  /*
-   * Revisions:
-   * Date          Owner      Description
-   * 11/06/2024    Wizard     Codice generato da Wizard
-   *
-   */
-  public BigDecimal getWidth() {
-    return iWidth;
-  }
+	/**
+	 * Restituisce l'attributo. 
+	 * @return BigDecimal
+	 */
+	/*
+	 * Revisions:
+	 * Date          Owner      Description
+	 * 11/06/2024    Wizard     Codice generato da Wizard
+	 *
+	 */
+	public BigDecimal getYPosition() {
+		return iYPosition;
+	}
 
-  /**
-   * Valorizza l'attributo. 
-   * @param height
-   */
-  /*
-   * Revisions:
-   * Date          Owner      Description
-   * 11/06/2024    Wizard     Codice generato da Wizard
-   *
-   */
-  public void setHeight(BigDecimal height) {
-    this.iHeight = height;
-    setDirty();
-  }
+	/**
+	 * Valorizza l'attributo. 
+	 * @param width
+	 */
+	/*
+	 * Revisions:
+	 * Date          Owner      Description
+	 * 11/06/2024    Wizard     Codice generato da Wizard
+	 *
+	 */
+	public void setWidth(BigDecimal width) {
+		this.iWidth = width;
+		setDirty();
+	}
 
-  /**
-   * Restituisce l'attributo. 
-   * @return BigDecimal
-   */
-  /*
-   * Revisions:
-   * Date          Owner      Description
-   * 11/06/2024    Wizard     Codice generato da Wizard
-   *
-   */
-  public BigDecimal getHeight() {
-    return iHeight;
-  }
+	/**
+	 * Restituisce l'attributo. 
+	 * @return BigDecimal
+	 */
+	/*
+	 * Revisions:
+	 * Date          Owner      Description
+	 * 11/06/2024    Wizard     Codice generato da Wizard
+	 *
+	 */
+	public BigDecimal getWidth() {
+		return iWidth;
+	}
 
-  /**
-   * Valorizza l'attributo. 
-   * @param tipoDocVen
-   */
-  /*
-   * Revisions:
-   * Date          Owner      Description
-   * 11/06/2024    Wizard     Codice generato da Wizard
-   *
-   */
-  public void setTipoDocVen(char tipoDocVen) {
-    this.iTipoDocVen = tipoDocVen;
-    setDirty();
-  }
+	/**
+	 * Valorizza l'attributo. 
+	 * @param height
+	 */
+	/*
+	 * Revisions:
+	 * Date          Owner      Description
+	 * 11/06/2024    Wizard     Codice generato da Wizard
+	 *
+	 */
+	public void setHeight(BigDecimal height) {
+		this.iHeight = height;
+		setDirty();
+	}
 
-  /**
-   * Restituisce l'attributo. 
-   * @return char
-   */
-  /*
-   * Revisions:
-   * Date          Owner      Description
-   * 11/06/2024    Wizard     Codice generato da Wizard
-   *
-   */
-  public char getTipoDocVen() {
-    return iTipoDocVen;
-  }
+	/**
+	 * Restituisce l'attributo. 
+	 * @return BigDecimal
+	 */
+	/*
+	 * Revisions:
+	 * Date          Owner      Description
+	 * 11/06/2024    Wizard     Codice generato da Wizard
+	 *
+	 */
+	public BigDecimal getHeight() {
+		return iHeight;
+	}
 
-  /**
-   * Valorizza l'attributo. 
-   * @param tipoDocAcq
-   */
-  /*
-   * Revisions:
-   * Date          Owner      Description
-   * 11/06/2024    Wizard     Codice generato da Wizard
-   *
-   */
-  public void setTipoDocAcq(char tipoDocAcq) {
-    this.iTipoDocAcq = tipoDocAcq;
-    setDirty();
-  }
+	/**
+	 * Valorizza l'attributo. 
+	 * @param tipoDocVen
+	 */
+	/*
+	 * Revisions:
+	 * Date          Owner      Description
+	 * 11/06/2024    Wizard     Codice generato da Wizard
+	 *
+	 */
+	public void setTipoDocVen(char tipoDocVen) {
+		this.iTipoDocVen = tipoDocVen;
+		setDirty();
+	}
 
-  /**
-   * Restituisce l'attributo. 
-   * @return char
-   */
-  /*
-   * Revisions:
-   * Date          Owner      Description
-   * 11/06/2024    Wizard     Codice generato da Wizard
-   *
-   */
-  public char getTipoDocAcq() {
-    return iTipoDocAcq;
-  }
+	/**
+	 * Restituisce l'attributo. 
+	 * @return char
+	 */
+	/*
+	 * Revisions:
+	 * Date          Owner      Description
+	 * 11/06/2024    Wizard     Codice generato da Wizard
+	 *
+	 */
+	public char getTipoDocVen() {
+		return iTipoDocVen;
+	}
 
-  /**
-   * Valorizza l'attributo. 
-   * @param tipodocumento
-   */
-  /*
-   * Revisions:
-   * Date          Owner      Description
-   * 11/06/2024    Wizard     Codice generato da Wizard
-   *
-   */
-  public void setTipodocumento(TipoDocumentoDigitale tipodocumento) {
-    String idAzienda = getIdAzienda();
-    if (tipodocumento != null) {
-      idAzienda = KeyHelper.getTokenObjectKey(tipodocumento.getKey(), 1);
-    }
-    setIdAziendaInternal(idAzienda);
-    this.iTipodocumento.setObject(tipodocumento);
-    setDirty();
-    setOnDB(false);
-  }
+	/**
+	 * Valorizza l'attributo. 
+	 * @param tipoDocAcq
+	 */
+	/*
+	 * Revisions:
+	 * Date          Owner      Description
+	 * 11/06/2024    Wizard     Codice generato da Wizard
+	 *
+	 */
+	public void setTipoDocAcq(char tipoDocAcq) {
+		this.iTipoDocAcq = tipoDocAcq;
+		setDirty();
+	}
 
-  /**
-   * Restituisce l'attributo. 
-   * @return TipoDocumentoDigitale
-   */
-  /*
-   * Revisions:
-   * Date          Owner      Description
-   * 11/06/2024    Wizard     Codice generato da Wizard
-   *
-   */
-  public TipoDocumentoDigitale getTipodocumento() {
-    return (TipoDocumentoDigitale)iTipodocumento.getObject();
-  }
+	/**
+	 * Restituisce l'attributo. 
+	 * @return char
+	 */
+	/*
+	 * Revisions:
+	 * Date          Owner      Description
+	 * 11/06/2024    Wizard     Codice generato da Wizard
+	 *
+	 */
+	public char getTipoDocAcq() {
+		return iTipoDocAcq;
+	}
 
-  /**
-   * setTipodocumentoKey
-   * @param key
-   */
-  /*
-   * Revisions:
-   * Date          Owner      Description
-   * 11/06/2024    Wizard     Codice generato da Wizard
-   *
-   */
-  public void setTipodocumentoKey(String key) {
-    iTipodocumento.setKey(key);
-    String idAzienda = KeyHelper.getTokenObjectKey(key, 1);
-    setIdAziendaInternal(idAzienda);
-    setDirty();
-    setOnDB(false);
-  }
+	/**
+	 * Valorizza l'attributo. 
+	 * @param tipodocumento
+	 */
+	/*
+	 * Revisions:
+	 * Date          Owner      Description
+	 * 11/06/2024    Wizard     Codice generato da Wizard
+	 *
+	 */
+	public void setTipodocumento(TipoDocumentoDigitale tipodocumento) {
+		String idAzienda = getIdAzienda();
+		if (tipodocumento != null) {
+			idAzienda = KeyHelper.getTokenObjectKey(tipodocumento.getKey(), 1);
+		}
+		setIdAziendaInternal(idAzienda);
+		this.iTipodocumento.setObject(tipodocumento);
+		setDirty();
+		setOnDB(false);
+	}
 
-  /**
-   * getTipodocumentoKey
-   * @return String
-   */
-  /*
-   * Revisions:
-   * Date          Owner      Description
-   * 11/06/2024    Wizard     Codice generato da Wizard
-   *
-   */
-  public String getTipodocumentoKey() {
-    return iTipodocumento.getKey();
-  }
+	/**
+	 * Restituisce l'attributo. 
+	 * @return TipoDocumentoDigitale
+	 */
+	/*
+	 * Revisions:
+	 * Date          Owner      Description
+	 * 11/06/2024    Wizard     Codice generato da Wizard
+	 *
+	 */
+	public TipoDocumentoDigitale getTipodocumento() {
+		return (TipoDocumentoDigitale)iTipodocumento.getObject();
+	}
 
-  /**
-   * Valorizza l'attributo. 
-   * @param idTipoDocumento
-   */
-  /*
-   * Revisions:
-   * Date          Owner      Description
-   * 11/06/2024    Wizard     Codice generato da Wizard
-   *
-   */
-  public void setIdTipoDocumento(String idTipoDocumento) {
-    String key = iTipodocumento.getKey();
-    iTipodocumento.setKey(KeyHelper.replaceTokenObjectKey(key , 2, idTipoDocumento));
-    setDirty();
-    setOnDB(false);
-  }
+	/**
+	 * setTipodocumentoKey
+	 * @param key
+	 */
+	/*
+	 * Revisions:
+	 * Date          Owner      Description
+	 * 11/06/2024    Wizard     Codice generato da Wizard
+	 *
+	 */
+	public void setTipodocumentoKey(String key) {
+		iTipodocumento.setKey(key);
+		String idAzienda = KeyHelper.getTokenObjectKey(key, 1);
+		setIdAziendaInternal(idAzienda);
+		setDirty();
+		setOnDB(false);
+	}
 
-  /**
-   * Restituisce l'attributo. 
-   * @return String
-   */
-  /*
-   * Revisions:
-   * Date          Owner      Description
-   * 11/06/2024    Wizard     Codice generato da Wizard
-   *
-   */
-  public String getIdTipoDocumento() {
-    String key = iTipodocumento.getKey();
-    String objIdTipoDocumento = KeyHelper.getTokenObjectKey(key,2);
-    return objIdTipoDocumento;
-  }
+	/**
+	 * getTipodocumentoKey
+	 * @return String
+	 */
+	/*
+	 * Revisions:
+	 * Date          Owner      Description
+	 * 11/06/2024    Wizard     Codice generato da Wizard
+	 *
+	 */
+	public String getTipodocumentoKey() {
+		return iTipodocumento.getKey();
+	}
 
-  /**
-   * Valorizza l'attributo. 
-   * @param parent
-   */
-  /*
-   * Revisions:
-   * Date          Owner      Description
-   * 11/06/2024    Wizard     Codice generato da Wizard
-   *
-   */
-  public void setParent(PsnDatiFirmaDigitale parent) {
-    setIdAziendaInternal(parent.getKey());
-    this.iParent.setObject(parent);
-    setDirty();
-    setOnDB(false);
-  }
+	/**
+	 * Valorizza l'attributo. 
+	 * @param idTipoDocumento
+	 */
+	/*
+	 * Revisions:
+	 * Date          Owner      Description
+	 * 11/06/2024    Wizard     Codice generato da Wizard
+	 *
+	 */
+	public void setIdTipoDocumento(String idTipoDocumento) {
+		String key = iTipodocumento.getKey();
+		iTipodocumento.setKey(KeyHelper.replaceTokenObjectKey(key , 2, idTipoDocumento));
+		setDirty();
+		setOnDB(false);
+	}
 
-  /**
-   * Restituisce l'attributo. 
-   * @return PsnDatiFirmaDigitale
-   */
-  /*
-   * Revisions:
-   * Date          Owner      Description
-   * 11/06/2024    Wizard     Codice generato da Wizard
-   *
-   */
-  public PsnDatiFirmaDigitale getParent() {
-    return (PsnDatiFirmaDigitale)iParent.getObject();
-  }
+	/**
+	 * Restituisce l'attributo. 
+	 * @return String
+	 */
+	/*
+	 * Revisions:
+	 * Date          Owner      Description
+	 * 11/06/2024    Wizard     Codice generato da Wizard
+	 *
+	 */
+	public String getIdTipoDocumento() {
+		String key = iTipodocumento.getKey();
+		String objIdTipoDocumento = KeyHelper.getTokenObjectKey(key,2);
+		return objIdTipoDocumento;
+	}
 
-  /**
-   * setParentKey
-   * @param key
-   */
-  /*
-   * Revisions:
-   * Date          Owner      Description
-   * 11/06/2024    Wizard     Codice generato da Wizard
-   *
-   */
-  public void setParentKey(String key) {
-    iParent.setKey(key);
-    setIdAziendaInternal(key);
-    setDirty();
-    setOnDB(false);
-  }
+	/**
+	 * Valorizza l'attributo. 
+	 * @param parent
+	 */
+	/*
+	 * Revisions:
+	 * Date          Owner      Description
+	 * 11/06/2024    Wizard     Codice generato da Wizard
+	 *
+	 */
+	public void setParent(PsnDatiFirmaDigitale parent) {
+		setIdAziendaInternal(parent.getKey());
+		this.iParent.setObject(parent);
+		setDirty();
+		setOnDB(false);
+	}
 
-  /**
-   * getParentKey
-   * @return String
-   */
-  /*
-   * Revisions:
-   * Date          Owner      Description
-   * 11/06/2024    Wizard     Codice generato da Wizard
-   *
-   */
-  public String getParentKey() {
-    return iParent.getKey();
-  }
+	/**
+	 * Restituisce l'attributo. 
+	 * @return PsnDatiFirmaDigitale
+	 */
+	/*
+	 * Revisions:
+	 * Date          Owner      Description
+	 * 11/06/2024    Wizard     Codice generato da Wizard
+	 *
+	 */
+	public PsnDatiFirmaDigitale getParent() {
+		return (PsnDatiFirmaDigitale)iParent.getObject();
+	}
 
-  /**
-   * Valorizza l'attributo. 
-   * @param idAzienda
-   */
-  /*
-   * Revisions:
-   * Date          Owner      Description
-   * 11/06/2024    Wizard     Codice generato da Wizard
-   *
-   */
-  public void setIdAzienda(String idAzienda) {
-    setIdAziendaInternal(idAzienda);
-    setDirty();
-    setOnDB(false);
-  }
+	/**
+	 * setParentKey
+	 * @param key
+	 */
+	/*
+	 * Revisions:
+	 * Date          Owner      Description
+	 * 11/06/2024    Wizard     Codice generato da Wizard
+	 *
+	 */
+	public void setParentKey(String key) {
+		iParent.setKey(key);
+		setIdAziendaInternal(key);
+		setDirty();
+		setOnDB(false);
+	}
 
-  /**
-   * Restituisce l'attributo. 
-   * @return String
-   */
-  /*
-   * Revisions:
-   * Date          Owner      Description
-   * 11/06/2024    Wizard     Codice generato da Wizard
-   *
-   */
-  public String getIdAzienda() {
-    String key = iAzienda.getKey();
-    return key;
-  }
+	/**
+	 * getParentKey
+	 * @return String
+	 */
+	/*
+	 * Revisions:
+	 * Date          Owner      Description
+	 * 11/06/2024    Wizard     Codice generato da Wizard
+	 *
+	 */
+	public String getParentKey() {
+		return iParent.getKey();
+	}
 
-  /**
-   * setEqual
-   * @param obj
-   * @throws CopyException
-   */
-  /*
-   * Revisions:
-   * Date          Owner      Description
-   * 11/06/2024    Wizard     Codice generato da Wizard
-   *
-   */
-  public void setEqual(Copyable obj) throws CopyException {
-    super.setEqual(obj);
-    AssociazioneTipoDocFirmaPO associazioneTipoDocFirmaPO = (AssociazioneTipoDocFirmaPO)obj;
-    iTipodocumento.setEqual(associazioneTipoDocFirmaPO.iTipodocumento);
-    iParent.setEqual(associazioneTipoDocFirmaPO.iParent);
-  }
+	/**
+	 * Valorizza l'attributo. 
+	 * @param idAzienda
+	 */
+	/*
+	 * Revisions:
+	 * Date          Owner      Description
+	 * 11/06/2024    Wizard     Codice generato da Wizard
+	 *
+	 */
+	public void setIdAzienda(String idAzienda) {
+		setIdAziendaInternal(idAzienda);
+		setDirty();
+		setOnDB(false);
+	}
 
-  /**
-   * checkAll
-   * @param components
-   * @return Vector
-   */
-  /*
-   * Revisions:
-   * Date          Owner      Description
-   * 11/06/2024    Wizard     Codice generato da Wizard
-   *
-   */
-  public Vector checkAll(BaseComponentsCollection components) {
-    Vector errors = new Vector();
-    components.runAllChecks(errors);
-    return errors;
-  }
+	/**
+	 * Restituisce l'attributo. 
+	 * @return String
+	 */
+	/*
+	 * Revisions:
+	 * Date          Owner      Description
+	 * 11/06/2024    Wizard     Codice generato da Wizard
+	 *
+	 */
+	public String getIdAzienda() {
+		String key = iAzienda.getKey();
+		return key;
+	}
 
-  /**
-   *  setKey
-   * @param key
-   */
-  /*
-   * Revisions:
-   * Date          Owner      Description
-   * 11/06/2024    Wizard     Codice generato da Wizard
-   *
-   */
-  public void setKey(String key) {
-    setIdAzienda(KeyHelper.getTokenObjectKey(key, 1));
-    setIdTipoDocumento(KeyHelper.getTokenObjectKey(key, 2));
-  }
+	/**
+	 * setEqual
+	 * @param obj
+	 * @throws CopyException
+	 */
+	/*
+	 * Revisions:
+	 * Date          Owner      Description
+	 * 11/06/2024    Wizard     Codice generato da Wizard
+	 *
+	 */
+	public void setEqual(Copyable obj) throws CopyException {
+		super.setEqual(obj);
+		AssociazioneTipoDocFirmaPO associazioneTipoDocFirmaPO = (AssociazioneTipoDocFirmaPO)obj;
+		iTipodocumento.setEqual(associazioneTipoDocFirmaPO.iTipodocumento);
+		iParent.setEqual(associazioneTipoDocFirmaPO.iParent);
+	}
 
-  /**
-   *  getKey
-   * @return String
-   */
-  /*
-   * Revisions:
-   * Date          Owner      Description
-   * 11/06/2024    Wizard     Codice generato da Wizard
-   *
-   */
-  public String getKey() {
-    String idAzienda = getIdAzienda();
-    String idTipoDocumento = getIdTipoDocumento();
-    Object[] keyParts = {idAzienda, idTipoDocumento};
-    return KeyHelper.buildObjectKey(keyParts);
-  }
+	/**
+	 * checkAll
+	 * @param components
+	 * @return Vector
+	 */
+	/*
+	 * Revisions:
+	 * Date          Owner      Description
+	 * 11/06/2024    Wizard     Codice generato da Wizard
+	 *
+	 */
+	@SuppressWarnings("rawtypes")
+	public Vector checkAll(BaseComponentsCollection components) {
+		Vector errors = new Vector();
+		components.runAllChecks(errors);
+		return errors;
+	}
 
-  /**
-   * isDeletable
-   * @return boolean
-   */
-  /*
-   * Revisions:
-   * Date          Owner      Description
-   * 11/06/2024    Wizard     Codice generato da Wizard
-   *
-   */
-  public boolean isDeletable() {
-    return checkDelete() == null;
-  }
+	/**
+	 *  setKey
+	 * @param key
+	 */
+	/*
+	 * Revisions:
+	 * Date          Owner      Description
+	 * 11/06/2024    Wizard     Codice generato da Wizard
+	 *
+	 */
+	public void setKey(String key) {
+		setIdAzienda(KeyHelper.getTokenObjectKey(key, 1));
+		setIdTipoDocumento(KeyHelper.getTokenObjectKey(key, 2));
+	}
 
-  /**
-   * getFatherKey
-   * @return String
-   */
-  /*
-   * Revisions:
-   * Date          Owner      Description
-   * 11/06/2024    Wizard     Codice generato da Wizard
-   *
-   */
-  public String getFatherKey() {
-    return getParentKey();
-  }
+	/**
+	 *  getKey
+	 * @return String
+	 */
+	/*
+	 * Revisions:
+	 * Date          Owner      Description
+	 * 11/06/2024    Wizard     Codice generato da Wizard
+	 *
+	 */
+	public String getKey() {
+		String idAzienda = getIdAzienda();
+		String idTipoDocumento = getIdTipoDocumento();
+		Object[] keyParts = {idAzienda, idTipoDocumento};
+		return KeyHelper.buildObjectKey(keyParts);
+	}
 
-  /**
-   * setFatherKey
-   * @param key
-   */
-  /*
-   * Revisions:
-   * Date          Owner      Description
-   * 11/06/2024    Wizard     Codice generato da Wizard
-   *
-   */
-  public void setFatherKey(String key) {
-    setParentKey(key);
-  }
+	/**
+	 * isDeletable
+	 * @return boolean
+	 */
+	/*
+	 * Revisions:
+	 * Date          Owner      Description
+	 * 11/06/2024    Wizard     Codice generato da Wizard
+	 *
+	 */
+	public boolean isDeletable() {
+		return checkDelete() == null;
+	}
 
-  /**
-   * setFather
-   * @param father
-   */
-  /*
-   * Revisions:
-   * Date          Owner      Description
-   * 11/06/2024    Wizard     Codice generato da Wizard
-   *
-   */
-  public void setFather(PersistentObject father) {
-    iParent.setObject(father);
-  }
+	/**
+	 * getFatherKey
+	 * @return String
+	 */
+	/*
+	 * Revisions:
+	 * Date          Owner      Description
+	 * 11/06/2024    Wizard     Codice generato da Wizard
+	 *
+	 */
+	public String getFatherKey() {
+		return getParentKey();
+	}
 
-  /**
-   * getOrderByClause
-   * @return String
-   */
-  /*
-   * Revisions:
-   * Date          Owner      Description
-   * 11/06/2024    Wizard     Codice generato da Wizard
-   *
-   */
-  public String getOrderByClause() {
-    return "";
-  }
+	/**
+	 * setFatherKey
+	 * @param key
+	 */
+	/*
+	 * Revisions:
+	 * Date          Owner      Description
+	 * 11/06/2024    Wizard     Codice generato da Wizard
+	 *
+	 */
+	public void setFatherKey(String key) {
+		setParentKey(key);
+	}
 
-  /**
-   * toString
-   * @return String
-   */
-  /*
-   * Revisions:
-   * Date          Owner      Description
-   * 11/06/2024    Wizard     Codice generato da Wizard
-   *
-   */
-  public String toString() {
-    return getClass().getName() + " [" + KeyHelper.formatKeyString(getKey()) + "]";
-  }
+	/**
+	 * setFather
+	 * @param father
+	 */
+	/*
+	 * Revisions:
+	 * Date          Owner      Description
+	 * 11/06/2024    Wizard     Codice generato da Wizard
+	 *
+	 */
+	public void setFather(PersistentObject father) {
+		iParent.setObject(father);
+	}
 
-  /**
-   *  getTableManager
-   * @return TableManager
-   * @throws SQLException
-   */
-  /*
-   * Revisions:
-   * Date          Owner      Description
-   * 11/06/2024    CodeGen     Codice generato da CodeGenerator
-   *
-   */
-  protected TableManager getTableManager() throws SQLException {
-    return AssociazioneTipoDocFirmaTM.getInstance();
-  }
+	/**
+	 * getOrderByClause
+	 * @return String
+	 */
+	/*
+	 * Revisions:
+	 * Date          Owner      Description
+	 * 11/06/2024    Wizard     Codice generato da Wizard
+	 *
+	 */
+	public String getOrderByClause() {
+		return "";
+	}
 
-  /**
-   * setIdAziendaInternal
-   * @param idAzienda
-   */
-  /*
-   * Revisions:
-   * Date          Owner      Description
-   * 11/06/2024    Wizard     Codice generato da Wizard
-   *
-   */
-  protected void setIdAziendaInternal(String idAzienda) {
-    iAzienda.setKey(idAzienda);
-        String key2 = iTipodocumento.getKey();
-    iTipodocumento.setKey(KeyHelper.replaceTokenObjectKey(key2, 1, idAzienda));
-    iParent.setKey(idAzienda);
-  }
+	/**
+	 * toString
+	 * @return String
+	 */
+	/*
+	 * Revisions:
+	 * Date          Owner      Description
+	 * 11/06/2024    Wizard     Codice generato da Wizard
+	 *
+	 */
+	public String toString() {
+		return getClass().getName() + " [" + KeyHelper.formatKeyString(getKey()) + "]";
+	}
+
+	/**
+	 *  getTableManager
+	 * @return TableManager
+	 * @throws SQLException
+	 */
+	/*
+	 * Revisions:
+	 * Date          Owner      Description
+	 * 11/06/2024    CodeGen     Codice generato da CodeGenerator
+	 *
+	 */
+	protected TableManager getTableManager() throws SQLException {
+		return AssociazioneTipoDocFirmaTM.getInstance();
+	}
+
+	/**
+	 * setIdAziendaInternal
+	 * @param idAzienda
+	 */
+	/*
+	 * Revisions:
+	 * Date          Owner      Description
+	 * 11/06/2024    Wizard     Codice generato da Wizard
+	 *
+	 */
+	protected void setIdAziendaInternal(String idAzienda) {
+		iAzienda.setKey(idAzienda);
+		String key2 = iTipodocumento.getKey();
+		iTipodocumento.setKey(KeyHelper.replaceTokenObjectKey(key2, 1, idAzienda));
+		iParent.setKey(idAzienda);
+	}
 
 }
 

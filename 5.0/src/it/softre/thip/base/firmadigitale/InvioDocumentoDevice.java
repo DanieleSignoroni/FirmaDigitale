@@ -21,7 +21,7 @@ public class InvioDocumentoDevice extends BusinessObjectAdapter implements Autho
 	protected String iIdAzienda;
 
 	protected String iClassName;
-	
+
 	protected String iChiaveSelezionato;
 
 	protected Proxy iDevice = new Proxy(it.softre.thip.base.firmadigitale.DeviceInvioDocumenti.class);
@@ -73,7 +73,7 @@ public class InvioDocumentoDevice extends BusinessObjectAdapter implements Autho
 		String objRFornitore = KeyHelper.getTokenObjectKey(key,2);
 		return objRFornitore;
 	}
-	
+
 	public String getChiaveSelezionato() {
 		return iChiaveSelezionato;
 	}
@@ -124,7 +124,10 @@ public class InvioDocumentoDevice extends BusinessObjectAdapter implements Autho
 				}
 			}
 		}
-		rc = attesaFirma.save();
+		if(attesaFirma.getIdDocumentoDgt() != null)
+			rc = attesaFirma.save();
+		else
+			throw new SQLException("Non e' stato trovato nessun documento da inviare");
 		return rc;
 	}
 

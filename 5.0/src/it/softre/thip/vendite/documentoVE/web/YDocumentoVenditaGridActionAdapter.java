@@ -14,6 +14,7 @@ import com.thera.thermfw.web.WebToolBarButton;
 import com.thera.thermfw.web.servlet.GridActionAdapter;
 
 import it.softre.thip.base.firmadigitale.InvioDocumentiUtils;
+import it.softre.thip.base.firmadigitale.PsnDatiFirmaDigitale;
 import it.thera.thip.vendite.documentoVE.DocumentoVendita;
 import it.thera.thip.vendite.documentoVE.web.DocumentoVenditaGridActionAdapter;
 
@@ -54,7 +55,7 @@ public class YDocumentoVenditaGridActionAdapter extends DocumentoVenditaGridActi
 						getStringParameter(se.getRequest(), OBJECT_KEY), PersistentObject.NO_LOCK);
 				String className = getStringParameter(se.getRequest(), GridActionAdapter.CLASS_NAME);
 				if(docVen != null 
-						&& InvioDocumentiUtils.isDocumentoAbilitatoInvio(docVen)
+						&& InvioDocumentiUtils.isDocumentoAbilitatoInvio(docVen) && PsnDatiFirmaDigitale.getCurrentPersDati().getAbilitata() == '1'
 						/*&& InvioDocumentiUtils.documentoVenditaHasDocumentiDigitali(docVen, className)*/) {
 					String thKey = getStringParameter(se.getRequest(), OBJECT_KEY);
 					se.getRequest().setAttribute("ChiaveSelezionato", thKey);

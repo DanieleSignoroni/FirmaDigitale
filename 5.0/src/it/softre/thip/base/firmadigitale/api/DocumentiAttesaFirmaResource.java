@@ -41,8 +41,8 @@ public class DocumentiAttesaFirmaResource extends BaseResource {
 
 	@GET
 	@Path("/recupera")
-	public Response recuperaDocumentiInAttesaDiFrima(@QueryParam("IdDevice") String idDevice) {
-		JSONObject infoDocumento = service.recuperaDocumentoDaFirmare(idDevice);
+	public Response recuperaDocumentiInAttesaDiFrima(@QueryParam("IdDevice") String idDevice,@QueryParam("IdAzienda") String idAzienda) {
+		JSONObject infoDocumento = service.recuperaDocumentoDaFirmare(idDevice, idAzienda);
 		if(infoDocumento.isEmpty()) {
 			return buildResponse(Status.OK,infoDocumento.put("info", "Nessun documento").toString());
 		}

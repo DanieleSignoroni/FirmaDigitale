@@ -12,7 +12,6 @@ import javax.ws.rs.core.Response.Status;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
-import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import org.json.JSONObject;
 
@@ -62,8 +61,9 @@ public class DocumentiAttesaFirmaService {
 		try {
 			JSONObject body = new JSONObject(jsonString);
 			keyDocOri = (String) body.get("documentId");
-			DocumentoDigitale docOri = (DocumentoDigitale) DocumentoDigitale.elementWithKey(DocumentoDigitale.class, keyDocOri, PersistentObject.NO_LOCK);
-			if(docOri != null) {
+			DocumentiAttesaFirma documentoAttesaFirma = (DocumentiAttesaFirma) DocumentiAttesaFirma.elementWithKey(DocumentiAttesaFirma.class, keyDocOri, PersistentObject.NO_LOCK);
+			DocumentoDigitale docOri = documentoAttesaFirma.getDocumentodigitale();
+			if(documentoAttesaFirma != null && docOri != null) {
 				DocumentoDgtOggetto oggetto = (DocumentoDgtOggetto) docOri.getOggetti().get(0);
 				String signatureDataUrl = (String) body.get("signature");
 				String base64Signature = signatureDataUrl.split(",")[1];
@@ -79,15 +79,12 @@ public class DocumentiAttesaFirmaService {
 				document.setAllSecurityToBeRemoved(true);
 
 				PDPage page = document.getPage(document.getNumberOfPages() - 1); // Get the last page
-				PDRectangle mediaBox = page.getMediaBox();
-				System.out.println("Page dimensions: width = " + mediaBox.getWidth() + ", height = " + mediaBox.getHeight());
 
-				
 				AssociazioneTipoDocFirma associazione = PsnDatiFirmaDigitale.recuperaAssociazioneTipoDocumento(docOri.getIdTipoDocDgt());
 				if(associazione == null) {
 					//errore grave
 				}
-				
+
 				// Draw the signature image onto the page
 				PDImageXObject pdImage = PDImageXObject.createFromByteArray(document, signatureBytes, "signature");
 				float x = associazione.getXPosition().floatValue(); // Example coordinates
@@ -128,11 +125,8 @@ public class DocumentiAttesaFirmaService {
 				int rc = docOri.save();
 
 				//flaggare il documento come processato
-				DocumentiAttesaFirma docAttesaFirma = DocumentiAttesaFirma.recuperaDocumentoInAttesaDiFirma(keyDocOri);
-				if(docAttesaFirma != null) {
-					docAttesaFirma.setProcessato(true);
-					rc = docAttesaFirma.save();
-				}
+				documentoAttesaFirma.setProcessato(true);
+				rc = documentoAttesaFirma.save();
 				if(rc > 0) {
 					status = Status.OK;
 					ConnectionManager.commit();
@@ -161,25 +155,28 @@ public class DocumentiAttesaFirmaService {
 		return str;
 	}
 
-	public JSONObject recuperaDocumentoDaFirmare(String idDevice) {
+	public JSONObject recuperaDocumentoDaFirmare(String idDevice,String idAzienda) {
 		JSONObject infoDocumento = new JSONObject();
-		String kDocDgt = recuperaChiaveDocumentoDigitale(idDevice);
-		if(kDocDgt != null) {
-			try {
-				DocumentoDigitale docDgt = (DocumentoDigitale) DocumentoDigitale.elementWithKey(DocumentoDigitale.class, kDocDgt, PersistentObject.NO_LOCK);
-				if(docDgt != null) {
-					if(docDgt.getOggetti().size() > 0) {
-						DocumentoDgtOggetto oggetto = (DocumentoDgtOggetto) docDgt.getOggetti().get(0);
-						infoDocumento.put("file",readInputStreamToByteArray(oggetto.getOggettoBlob()));
-						infoDocumento.put("chiaveDocumentoDigitale", docDgt.getKey());
+		DocumentiAttesaFirma documentoAttesaFirma = recuperaChiaveDocumentoDigitale(idDevice,idAzienda);
+		if(documentoAttesaFirma != null) {
+			String kDocDgt = documentoAttesaFirma.getDocumentodigitaleKey();
+			if(kDocDgt != null) {
+				try {
+					DocumentoDigitale docDgt = (DocumentoDigitale) DocumentoDigitale.elementWithKey(DocumentoDigitale.class, kDocDgt, PersistentObject.NO_LOCK);
+					if(docDgt != null) {
+						if(docDgt.getOggetti().size() > 0) {
+							DocumentoDgtOggetto oggetto = (DocumentoDgtOggetto) docDgt.getOggetti().get(0);
+							infoDocumento.put("file",readInputStreamToByteArray(oggetto.getOggettoBlob()));
+							infoDocumento.put("chiaveDocumentoDigitale", documentoAttesaFirma.getKey());
+						}
 					}
+				} catch (SQLException e) {
+					e.printStackTrace(Trace.excStream);
+				} catch (IOException e) {
+					e.printStackTrace(Trace.excStream);
+				} catch (Exception e) {
+					e.printStackTrace(Trace.excStream);
 				}
-			} catch (SQLException e) {
-				e.printStackTrace(Trace.excStream);
-			} catch (IOException e) {
-				e.printStackTrace(Trace.excStream);
-			} catch (Exception e) {
-				e.printStackTrace(Trace.excStream);
 			}
 		}
 		return infoDocumento;
@@ -201,25 +198,24 @@ public class DocumentiAttesaFirmaService {
 		return byteBuffer.toByteArray();
 	}
 
-	public String recuperaChiaveDocumentoDigitale(String idDevice) {
-		idDevice = "TABLEZ";
-		String idAzienda = "001";
+	public DocumentiAttesaFirma recuperaChiaveDocumentoDigitale(String idDevice, String idAzienda) {
+		DocumentiAttesaFirma doc = null;
 		String key = null;
 		ResultSet rs = null;
 		CachedStatement cs = null;
-		String stmt = " SELECT "+DocumentiAttesaFirmaTM.ID_AZIENDA+","+DocumentiAttesaFirmaTM.R_DOC_DGT+","+DocumentiAttesaFirmaTM.R_VRS_DOC_DGT+" "
+		String stmt = " SELECT "+DocumentiAttesaFirmaTM.ID_AZIENDA+","+DocumentiAttesaFirmaTM.ID+" "
 				+ "FROM "+DocumentiAttesaFirmaTM.TABLE_NAME+" WHERE "+DocumentiAttesaFirmaTM.ID_AZIENDA+" = '"+idAzienda+"' "
 				+ "AND "+DocumentiAttesaFirmaTM.R_DEVICE+" = '"+idDevice+"' "
-				+ "AND "+DocumentiAttesaFirmaTM.PROCESSATO+" = '"+Column.FALSE_CHAR+"' ";
+				+ "AND "+DocumentiAttesaFirmaTM.PROCESSATO+" = '"+Column.FALSE_CHAR+"' ORDER BY ID DESC ";
 		try {
 			cs = new CachedStatement(stmt);
 			rs = cs.executeQuery();
 			if(rs.next()) {
 				key = KeyHelper.buildObjectKey(new String[] {
 						rs.getString(DocumentiAttesaFirmaTM.ID_AZIENDA),
-						rs.getString(DocumentiAttesaFirmaTM.R_DOC_DGT),
-						rs.getString(DocumentiAttesaFirmaTM.R_VRS_DOC_DGT)
+						rs.getString(DocumentiAttesaFirmaTM.ID)
 				});
+				doc = (DocumentiAttesaFirma) DocumentiAttesaFirma.elementWithKey(DocumentiAttesaFirma.class, key, PersistentObject.NO_LOCK);
 			}
 		}catch (SQLException e) {
 			e.printStackTrace(Trace.excStream);
@@ -235,6 +231,6 @@ public class DocumentiAttesaFirmaService {
 				e.printStackTrace(Trace.excStream);
 			}
 		}
-		return key;
+		return doc;
 	}
 }

@@ -2,10 +2,14 @@
 <%@page import="com.thera.thermfw.base.IniFile"%>
 <%
 String webAppPath = IniFile.getValue("thermfw.ini", "Web", "WebApplicationPath");
+//Lo recupero dalla request e lo uso per filtrare i documenti da firmare
+String idDevice = request.getParameter("IdDevice");
+String idAzienda = request.getParameter("IdAzienda");
 %>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <title>Firma Documento</title>
 <link rel="icon" type="image/x-icon" href="/<%=webAppPath%>/thermweb/image/nav/favicon.ico">
  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css"
@@ -30,6 +34,7 @@ String webAppPath = IniFile.getValue("thermfw.ini", "Web", "WebApplicationPath")
         html, body {
             height: 100%;
             margin: 0;
+            touch-action: manipulation; /* Prevent zooming */
         }
         .container-fluid {
             height: 100%;
@@ -69,13 +74,13 @@ String webAppPath = IniFile.getValue("thermfw.ini", "Web", "WebApplicationPath")
     .btn-custom:hover {
         background-color: rgb(117, 144, 166);
     }
-    #signature-pad {
-        border: 2px solid #000;
-        border-radius: 10px;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        height:300px;
-        width:500px;
-    }
+     #signature-pad { 
+/*         border: 2px solid #000; */
+/*         border-radius: 10px; */
+/*         box-shadow: 0 4px 8px rgba(0,0,0,0.1); */
+	width:500px;
+	height:500px;
+     } 
     
     canvas {
 touch-action: none; /* Prevent touch events from being handled by the browser */
@@ -85,7 +90,7 @@ touch-action: none; /* Prevent touch events from being handled by the browser */
 <body>
 	<div class="container-fluid">
 		<div class="row">
-			<div class="col-lg-6 col-sm-12 col-left p-2">
+			<div class="col-lg-6 col-sm-6 col-left p-2">
 			<h3>Firma qui</h3>
 				<canvas id="signature-pad"
 					style="border: 1px solid #000000;"></canvas>
@@ -95,9 +100,10 @@ touch-action: none; /* Prevent touch events from being handled by the browser */
 				</div>
 
 			</div>
-			<div class="col-lg-6 col-sm-12 col-right">
+			<div class="col-lg-6 col-sm-6 col-right">
 				<iframe class="pdf-viewer" id="pdfViewer" src="" frameborder="0"></iframe>
 				<input type="hidden" id="chiaveDocumentoDigitale"></input>
+				<input type="hidden" id="chiaveDocumentoDaFirmare"></input>
 			</div>
 		</div>
 	</div>
@@ -127,6 +133,21 @@ touch-action: none; /* Prevent touch events from being handled by the browser */
             fetchDocument();
         });
         
+        document.addEventListener('touchstart', function(event) {
+            if (event.touches.length > 1) {
+                event.preventDefault();
+            }
+        }, { passive: false });
+
+        var lastTouchEnd = 0;
+        document.addEventListener('touchend', function(event) {
+            var now = (new Date()).getTime();
+            if (now - lastTouchEnd <= 300) {
+                event.preventDefault();
+            }
+            lastTouchEnd = now;
+        }, false);
+        
         function openModal(paragraphId,elementToClick,text,titleId,titleText){
         	$('#'+paragraphId).html(text);	
         	$('#'+titleId).html(titleText);
@@ -134,10 +155,12 @@ touch-action: none; /* Prevent touch events from being handled by the browser */
         }
 
         function fetchDocument() {
-            $.ajax({
-                url: getURLWS() + '/firmaDigitale/documenti/attesaFirma/recupera',
+        	$.ajax({
+        		url: getURLWS() + '/firmaDigitale/documenti/attesaFirma/recupera' +
+        	     '?IdDevice=' + encodeURIComponent('<%=idDevice%>') +
+        	     '&IdAzienda=' + encodeURIComponent('<%=idAzienda%>'),
                 method: 'GET',
-                dataType: 'json',
+                contentType: 'application/json',
                 success: function(data) {
                     if (data.info != 'Nessun documento') {
                         clearInterval(pollingInterval); // Stop polling
@@ -174,24 +197,31 @@ touch-action: none; /* Prevent touch events from being handled by the browser */
         var ctx = canvas.getContext('2d');
         var drawing = false;
         var pollingInterval;
+        
+        var scale = 2; // Change this scale based on your desired canvas size.
+
+        canvas.width = canvas.clientWidth * scale;
+        canvas.height = canvas.clientHeight * scale;
+        ctx.scale(scale, scale);
 
         // Function to get the mouse or touch position relative to the canvas
         function getPosition(event) {
             var rect = canvas.getBoundingClientRect();
             var x, y;
             if (event.touches) {
-                x = event.touches[0].clientX - rect.left;
-                y = event.touches[0].clientY - rect.top;
+            	 x = event.touches[0].pageX - rect.left - window.scrollX;
+                 y = event.touches[0].pageY - rect.top - window.scrollY;
             } else {
-                x = event.clientX - rect.left;
-                y = event.clientY - rect.top;
+            	x = event.pageX - rect.left - window.scrollX;
+                y = event.pageY - rect.top - window.scrollY;
             }
-            return {x: x, y: y};
+            return { x: x, y: y };
         }
 
         // Start drawing
         function startDrawing(event) {
             drawing = true;
+            ctx.beginPath();  // Start a new path each time drawing starts
             var position = getPosition(event);
             ctx.moveTo(position.x, position.y);
         }
@@ -225,7 +255,6 @@ touch-action: none; /* Prevent touch events from being handled by the browser */
             event.preventDefault(); // Prevent scrolling when touching the canvas
             draw(event);
         });
-        
         canvas.addEventListener('touchend', stopDrawing);
         canvas.addEventListener('touchcancel', stopDrawing);
 
@@ -234,7 +263,7 @@ touch-action: none; /* Prevent touch events from being handled by the browser */
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             ctx.beginPath();  // Reset the path
         }
-        
+
         // Check if the canvas is empty
         function isCanvasEmpty() {
             const blankCanvas = document.createElement('canvas');
@@ -242,6 +271,7 @@ touch-action: none; /* Prevent touch events from being handled by the browser */
             blankCanvas.height = canvas.height;
             return canvas.toDataURL() === blankCanvas.toDataURL();
         }
+
 
         // Save the signature
         function saveSignature() {
@@ -260,7 +290,7 @@ touch-action: none; /* Prevent touch events from being handled by the browser */
             
             var requestData = {
                 documentId: chiaveDocumentoDigitale,
-                signature: signatureDataUrl
+                signature: signatureDataUrl,
             };
 
             $.ajax({
